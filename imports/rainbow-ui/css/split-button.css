@@ -1,0 +1,25 @@
+.dropdown {
+    position: absolute;
+    display: inline-block;
+    border-left: 1px solid #004367;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #006CA7;
+    z-index: 1;
+    cursor: pointer;
+    border: 1px solid #004367;
+}
+
+.dropdown-content .btn {
+    color: #fff;
+    width: 100%;
+    text-align: left;
+    margin: 0;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

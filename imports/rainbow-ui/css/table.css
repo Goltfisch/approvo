@@ -1,0 +1,56 @@
+table.table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #fff;
+}
+
+table.table tr {
+    border-bottom: 5px solid #eee;
+}
+
+table.table th {
+    font-weight: normal;
+    font-size: 14px;
+    text-align: left;
+    padding: 5px 15px;
+}
+
+table.table td {
+    text-align: left;
+    color: black;
+    padding: 0 15px;
+    font-size: 14px;
+}
+
+table.table tr th.col-size-1, 
+table.table tr td.col-size-1 {
+    width: 10%;
+}
+
+table.table tr th.col-size-2, 
+table.table tr td.col-size-2 {
+    width: 20%;
+}
+
+table.table tr th.col-size-3, 
+table.table tr td.col-size-3 {
+    width: 30%;
+}
+
+table.table tr th.col-size-4, 
+table.table tr td.col-size-4 {
+    width: 40%;
+}
+
+table.table tr th.col-size-5, 
+table.table tr td.col-size-5 {
+    width: 50%;
+}
+
+table.table tr th.col-size-6, 
+table.table tr td.col-size-6 {
+    width: 60%;
+}
+

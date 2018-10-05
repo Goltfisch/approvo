@@ -1,0 +1,24 @@
+.footer {
+    background-color: #000;
+    color: #828282;
+    display: flex;
+    padding: 15px 0;
+    font-size: 14px;
+    height: 50px;
+    box-sizing: border-box;
+}
+
+.footer .copyright-block, 
+.footer .message-block {
+    width: 30%;
+    text-align: center;
+}
+
+.footer .version-block {
+    width: 40%;
+    text-align: center;
+}
+
+.footer .message-block .fa-heart {
+    color: #006CA7;
+}

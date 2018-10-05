@@ -1,0 +1,16 @@
+.badge {
+    border-radius: 50px;
+    background-color: #eee;
+    font-size: 12px;
+    text-align: center;
+    width: auto;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 8px;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: #fff;
+}

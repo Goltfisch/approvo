@@ -1,0 +1,20 @@
+{
+  "name": "approvo",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.42",
+    "accounting": "^0.4.1",
+    "classnames": "^2.2.6",
+    "faker": "^4.1.0",
+    "fontawesome": "^4.7.2",
+    "meteor-node-stubs": "^0.3.2",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-meteor-data": "^0.2.11",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
+  }
+}
