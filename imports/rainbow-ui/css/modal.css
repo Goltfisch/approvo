@@ -17,7 +17,7 @@
 }
 
 .modal {
-    height: 300px;
+    min-height: 300px;
     width: 600px;
     background-color: white;
     border: 1px solid black;
@@ -27,6 +27,18 @@
     margin-left: auto;
     margin-right: auto;
     padding: 25px;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    
+}
+
+.modal-close-btn i.fa-times-circle {
+    font-size: 24px;
 }
 
 body {

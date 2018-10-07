@@ -5,7 +5,7 @@ import accounting from 'accounting';
 import { Approvals } from '/imports/api/approvals/approvals.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
 
-import NewApprovalForm from '/imports/ui/modals/NewApprovalForm.js';
+import NewApprovalModal from '/imports/ui/modals/NewApprovalModal.js';
 
 import Table from '/imports/rainbow-ui/Table.js';
 import SplitButton from '/imports/rainbow-ui/SplitButton.js';
@@ -186,7 +186,7 @@ export class DashboardPage extends Component {
         return (
             <div className='dashboard-page'>
                 <Modal>
-                    <NewApprovalForm />
+                    <NewApprovalModal />
                 </Modal>
                 <div className="content-approvals">
                     <div className='content-approvals-actions'>

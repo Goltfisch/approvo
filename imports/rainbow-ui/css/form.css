@@ -1,0 +1,40 @@
+.form-wrapper {
+    text-align: left;
+}
+
+.form-wrapper .form-headline {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.form-wrapper .form-description {
+    margin-bottom: 25px;
+}
+
+.form-wrapper .input-group-wrapper {
+    margin-bottom: 15px;
+}
+
+.form-wrapper .input-group-wrapper .label-wrapper label {
+    color: #a1a1a1;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+.form-wrapper .input-group-wrapper .input-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    background-color: #fafafa;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    outline: 0;
+    font-size: 14px;
+}
+
+.form-wrapper .form-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
