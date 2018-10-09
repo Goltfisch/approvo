@@ -11,8 +11,8 @@ export default class Form extends Component {
         return configuration.buttons.map((button, index) => {
             const buttonTypeClass = 'btn ' + button.type + '-btn';
             return (
-                <div className='button-wrapper'>
-                    <Button key={index} className={buttonTypeClass} handleClick={button.onClick}>
+                <div key={index} className='button-wrapper'>
+                    <Button className={buttonTypeClass} handleClick={button.onClick}>
                         {button.label}
                     </Button>
                 </div>
@@ -30,7 +30,7 @@ export default class Form extends Component {
                         <label>{input.label}</label>
                     </div>
                     <div className='input-wrapper'>
-                        <input type={input.type} />
+                        <input type={input.type} placeholder={input.placeholder} />
                     </div>
                 </div>
             );

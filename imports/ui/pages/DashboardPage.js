@@ -15,10 +15,27 @@ import Badge from '/imports/rainbow-ui/Badge.js';
 import Modal from '/imports/rainbow-ui/Modal.js';
 
 export class DashboardPage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            modals: [
+                {
+                    id: 'dashboardAddApprovalModal',
+                    content: <NewApprovalModal />,
+                    visible: false
+                }
+            ]
+        }
+
+        this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+    }
+
     getTableHeader() {
         return [
             {
-                key: 'name',
+                key: 'linkedName',
                 content: 'Name',
                 col: '2'
             },
@@ -73,10 +90,12 @@ export class DashboardPage extends Component {
 
         return approvals.map((approval) => {
             if(approval.link) {
-                approval.name = <a href={approval.link} target="_blank">{approval.name}</a>;
+                approval.linkedName = <a href={approval.link} target="_blank">{approval.name}</a>;
+            } else {
+                approval.linkedName = approval.name;
             }
 
-            return Object.assign(approval, {  
+            return Object.assign({}, approval, {  
                 actions: <SplitButton documentId={approval._id} handleClick={this.handleStateButtonClick} actions={this.getStateActions()}></SplitButton>
             });
         });
@@ -178,16 +197,48 @@ export class DashboardPage extends Component {
         }
     }
 
+    renderModals() {
+        const { modals } = this.state;
+
+        return modals.map((modal, index) => {
+            if(modal.visible) {
+                return (<Modal key={index} closeModal={this.closeModal}>
+                    {modal.content}
+                </Modal>);
+            }
+        });
+    }
+
     handleNewButtonClick() {
-        console.log('NEW APPROVAL');
+        this.setState((state) => {
+            return state.modals.map((modal, index) => {
+                if(modal.id === 'dashboardAddApprovalModal') {
+                    modal.visible = true;
+                } else {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
+    }
+
+    closeModal() {
+        this.setState((state) => {
+            return state.modals.map((modal, index) => {
+                if(modal.id === 'dashboardAddApprovalModal') {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
     }
     
     render() {
         return (
             <div className='dashboard-page'>
-                <Modal>
-                    <NewApprovalModal />
-                </Modal>
+                {this.renderModals()}
                 <div className="content-approvals">
                     <div className='content-approvals-actions'>
                         <Search />

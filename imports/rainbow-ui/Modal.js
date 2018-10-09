@@ -8,11 +8,19 @@ export default class Modal extends Component {
 
         this.handleClick = this.handleClick.bind(this);
     }
+
+    componentWillMount() {
+        document.body.style.overflow = "hidden";
+    }
+    
+    componentWillUnmount() {
+        document.body.style.overflow = "visible";
+    }
     
     handleClick(event) {
         event.preventDefault();
 
-        console.log('close modal');
+        this.props.closeModal();
     }
 
     render() {
