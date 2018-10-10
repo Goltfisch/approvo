@@ -5,23 +5,24 @@ import Button from '/imports/rainbow-ui/Button.js';
 import './css/form.css';
 
 export default class Form extends Component {
-    renderFormButtons() {
-        const configuration = this.props.configuration;
+    constructor(props) {
+        super(props);
+        
+        let inputState = {};
 
-        return configuration.buttons.map((button, index) => {
-            const buttonTypeClass = 'btn ' + button.type + '-btn';
-            return (
-                <div key={index} className='button-wrapper'>
-                    <Button className={buttonTypeClass} handleClick={button.onClick}>
-                        {button.label}
-                    </Button>
-                </div>
-            );
+        props.configuration.inputs.forEach((input) => {
+            inputState[input.name] = input.defaultValue ? input.defaultValue : '';
         });
+
+        this.state = inputState;
+
+        this.onChangeInput = this.onChangeInput.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
     
     renderForm() {
         const configuration = this.props.configuration;
+        const state = this.state;
 
         return configuration.inputs.map((input, index) => {
             return (
@@ -30,13 +31,58 @@ export default class Form extends Component {
                         <label>{input.label}</label>
                     </div>
                     <div className='input-wrapper'>
-                        <input type={input.type} placeholder={input.placeholder} />
+                        <input type={input.type} name={input.name} placeholder={input.placeholder} value={state[input.name]} onChange={this.onChangeInput}/>
                     </div>
                 </div>
             );
         });
     }
+
+    onChangeInput(event) {
+        const name = event.target.name;
+        const value = event.target.value;
+
+        this.setState((state) => {
+            state[name] = value;
+            return state
+        });
+    }
+
+    submitForm() {
+        const buttons = this.props.configuration.buttons;
+        const submitButton = buttons.find((button) => {
+            return button.type === 'submit'
+        });
+
+        if(submitButton) {
+            submitButton.onClick(this.state);
+        }
+    }
     
+    renderFormButtons() {
+        const configuration = this.props.configuration;
+
+        return configuration.buttons.map((button, index) => {
+            const buttonTypeClass = 'btn ' + button.className + '-btn';
+
+            let handleButtonClick = () => {};
+
+            if(button.type === 'submit') {
+                handleButtonClick = this.submitForm;
+            } else {
+                handleButtonClick = button.onClick;
+            }
+
+            return (
+                <div key={index} className='button-wrapper'>
+                    <Button className={buttonTypeClass} handleClick={handleButtonClick}>
+                        {button.label}
+                    </Button>
+                </div>
+            );
+        });
+    }
+
     render() {
         const { configuration } = this.props;
 

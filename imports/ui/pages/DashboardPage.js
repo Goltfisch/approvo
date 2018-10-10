@@ -18,18 +18,18 @@ export class DashboardPage extends Component {
     constructor(props) {
         super(props);
 
+        this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
         this.state = {
             modals: [
                 {
                     id: 'dashboardAddApprovalModal',
-                    content: <NewApprovalModal />,
+                    content: <NewApprovalModal cancelButtonClick={this.closeModal} />,
                     visible: false
                 }
             ]
         }
-
-        this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
-        this.closeModal = this.closeModal.bind(this);
     }
 
     getTableHeader() {

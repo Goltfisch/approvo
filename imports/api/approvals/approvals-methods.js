@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { Bert } from 'meteor/themeteorchef:bert';
 
 import { Approvals } from './approvals.js'
 
@@ -11,36 +10,37 @@ Meteor.methods({
 
         approval.state = 'requested';
         approval.deleted = false;
+        approval.createdAt = new Date();
 
         const currentUser = Meteor.user();
 
         const approvalInsert = Approvals.insert(approval);
 
-        emails.forEach(element => {
-            let email = {};
-            let data = {};
+        // emails.forEach(element => {
+        //     let email = {};
+        //     let data = {};
 
-            email.from = 'noreply@approvo.com';
-            email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!';
+        //     email.from = 'noreply@approvo.com';
+        //     email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!';
 
-            if(typeof element.to == 'object' && element.to.groupKey) {
-                let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                email.to = groupKeyUser.emails[0].address;
-                data.groupKeyName = groupKeyUser.username;
-            }else {
-                email.to = element.to
-            }
+        //     if(typeof element.to == 'object' && element.to.groupKey) {
+        //         let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
+        //         email.to = groupKeyUser.emails[0].address;
+        //         data.groupKeyName = groupKeyUser.username;
+        //     }else {
+        //         email.to = element.to
+        //     }
 
-            var admin = Meteor.users.findOne({ userRole: 'admin' });
+        //     var admin = Meteor.users.findOne({ userRole: 'admin' });
 
-            data.ownerName = currentUser.name;
-            data.approvalName = approval.name;
-            data.adminName = admin.name;
+        //     data.ownerName = currentUser.name;
+        //     data.approvalName = approval.name;
+        //     data.adminName = admin.name;
 
-            email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
+        //     email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
 
-            Meteor.call('EmailTemplates.sendEmail', email);
-        });
+        //     Meteor.call('EmailTemplates.sendEmail', email);
+        // });
 
         const newLog = {
             date: moment(new Date()).format('DD.MM.YYYY'),
