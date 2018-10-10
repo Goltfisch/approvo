@@ -61,10 +61,20 @@ export default class SplitButton extends Component {
     }
 
     render() {
+        
+        const { actions } = this.props;
+
+        let hasMain = actions.filter((button) => {
+            return button.isMain;
+        });
+
         return (
             <div>
-                {this.renderMainButton()}
-                {this.renderDropdown()}
+                { hasMain.length > 0 ?
+                    <div>
+                        {this.renderMainButton()}
+                        {this.renderDropdown()} 
+                    </div>: '' }
             </div>
         );
     }

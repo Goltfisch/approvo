@@ -14,3 +14,13 @@
     background-color: #28a745;
     color: #fff;
 }
+
+.badge-alternative {
+    background-color: #111111;
+    color: #fff;
+}
+
+.badge-danger {
+    background-color: #721c24;
+    color: #fff;
+}

@@ -5,7 +5,7 @@ import { Approvals } from './approvals.js'
 Meteor.methods({
     'Approvals.insert' (approval, emails) {
         if (!this.userId) {
-            throw new Meteor.Error('not-authorized');
+            throw new Meteor.Error('not-authorized', 'You are not authorized!');
         }
 
         approval.state = 'requested';
@@ -58,7 +58,7 @@ Meteor.methods({
         const currentUser = Meteor.user();
 
         if(currentUser.userRole != 'admin') {
-            throw new Meteor.Error('not-allowed');
+            throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             return Approvals.update(approval._id, { $set: approval });
         }
@@ -69,8 +69,8 @@ Meteor.methods({
         approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole != 'admin') {
-            throw new Meteor.Error('not-allowed');
-        }else {
+            throw new Meteor.Error('not-allowed', 'You are not allowed');
+        } else {
             if(approval && approval.state && approval.state === 'requested') {
                 approval.lastEditByAdmin = currentUser.name;
 
@@ -78,32 +78,32 @@ Meteor.methods({
 
                 Approvals.update(documentId, { $set: approval });
 
-                emails.forEach(element => {
-                    let email = {};
-                    let data = {};
+                // emails.forEach(element => {
+                //     let email = {};
+                //     let data = {};
 
-                    email.from = 'noreply@approvo.com';
-                    email.subject = '[Approvo] Anfrage "'+ approval.name +'" freigegeben!';
+                //     email.from = 'noreply@approvo.com';
+                //     email.subject = '[Approvo] Anfrage "'+ approval.name +'" freigegeben!';
 
-                    if(typeof element.to === 'object' && element.to.groupKey) {
-                        let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                        email.to = groupKeyUser.emails[0].address;
-                        data.groupKeyName = groupKeyUser.username;
-                    }else{
-                        email.to = element.to;
-                    }
+                //     if(typeof element.to === 'object' && element.to.groupKey) {
+                //         let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
+                //         email.to = groupKeyUser.emails[0].address;
+                //         data.groupKeyName = groupKeyUser.username;
+                //     }else{
+                //         email.to = element.to;
+                //     }
 
-                    roleUser = Meteor.users.findOne({ userRole: element.to.groupKey })
+                //     roleUser = Meteor.users.findOne({ userRole: element.to.groupKey })
 
-                    data.ownerName = approval.owner;
-                    data.shoppingName = roleUser.name;
-                    data.adminName = approval.lastEditByAdmin;
-                    data.approvalName = approval.name;
+                //     data.ownerName = approval.owner;
+                //     data.shoppingName = roleUser.name;
+                //     data.adminName = approval.lastEditByAdmin;
+                //     data.approvalName = approval.name;
 
-                    email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
+                //     email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
 
-                    Meteor.call('EmailTemplates.sendEmail', email);
-                });
+                //     Meteor.call('EmailTemplates.sendEmail', email);
+                // });
 
                 const newLog = {
                     date: moment(new Date()).format('DD.MM.YYYY'),
@@ -116,7 +116,7 @@ Meteor.methods({
                 Meteor.call('Logs.insert', newLog);
 
             }else {
-                throw new Meteor.Error('not-allowed');
+                throw new Meteor.Error('not-possible', 'This action is not possible!');
             }
         }
     },
@@ -245,7 +245,7 @@ Meteor.methods({
         approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole != 'admin') {
-            throw new Meteor.Error('not-allowed');
+            throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             if(approval && approval.state && approval.state == 'requested') {
                 approval.lastEditByAdmin = currentUser.name;

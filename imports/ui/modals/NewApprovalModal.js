@@ -38,7 +38,7 @@ class NewApprovalModal extends Component {
                                 return;
                             }
 
-                            Bert.alert('Freigabe wurde erstellt!', 'info', 'growl-top-right');
+                            Bert.alert('Anfrage wurde erstellt!', 'info', 'growl-top-right');
                             props.cancelButtonClick();
                         });
                     }

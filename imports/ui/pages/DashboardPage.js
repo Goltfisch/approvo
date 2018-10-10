@@ -72,6 +72,12 @@ export class DashboardPage extends Component {
                         case 'approve':
                            return <Badge type='success'>{item}</Badge>
                            break;
+                        case 'complete':
+                           return <Badge type='alternative'>{item}</Badge>
+                           break;
+                        case 'decline':
+                           return <Badge type='danger'>{item}</Badge>
+                           break;
                         default:
                             return <Badge>{item}</Badge>
                     }
@@ -96,29 +102,33 @@ export class DashboardPage extends Component {
             }
 
             return Object.assign({}, approval, {  
-                actions: <SplitButton documentId={approval._id} handleClick={this.handleStateButtonClick} actions={this.getStateActions()}></SplitButton>
+                actions: <SplitButton documentId={approval._id} handleClick={this.handleStateButtonClick} actions={this.getStateActions(approval.state)} />
             });
         });
     }
 
-    getStateActions() {
+    getStateActions(state) {
+
         return [
             {
                 label: 'Freigeben',
                 key: 'approve',
-                isMain: true,
+                isMain: state == 'requested',
             },
             {
                 label: 'Bestellen',
-                key: 'order'
+                key: 'order',
+                isMain: state == 'approve'
             },
             {
                 label: 'Abschließen',
-                key: 'complete'
+                key: 'complete',
+                isMain: state == 'order'
             },
             {
                 label: 'Ablehnen',
-                key: 'decline'
+                key: 'decline',
+                isMain: state == 'decline'
             }
         ];
     }
@@ -127,20 +137,25 @@ export class DashboardPage extends Component {
         let emails = [];
         switch(action) {
             case 'approve':
-                emails.push({
-                    to: 'michael.moor@goltfisch.de',
-                    template: 'userApproveMsgEmail'
-                });
+                // emails.push({
+                //     to: 'michael.moor@goltfisch.de',
+                //     template: 'userApproveMsgEmail'
+                // });
 
-                emails.push({
-                    to: {
-                        groupKey: 'shopping'
-                    },
-                    template: 'shoppingApproveMsgEmail'
-                });
+                // emails.push({
+                //     to: {
+                //         groupKey: 'shopping'
+                //     },
+                //     template: 'shoppingApproveMsgEmail'
+                // });
 
                 Meteor.call('Approvals.approve', documentId, emails, (error, result) => {
+                    if(error) {
+                        Bert.alert(error.reason, 'danger', 'growl-top-right');
+                        return;
+                    }
                     
+                    Bert.alert('Anfrage wurde freigegeben!', 'info', 'growl-top-right');
                 });
 
                 break;
@@ -190,7 +205,12 @@ export class DashboardPage extends Component {
                 });
 
                 Meteor.call('Approvals.decline', documentId, emails, (error, result) => {
-
+                    if(error) {
+                        Bert.alert(error.reason, 'danger', 'growl-top-right');
+                        return;
+                    }
+                    
+                    Bert.alert('Anfrage wurde abgelehnt!', 'info', 'growl-top-right');
                 });
 
                 break;

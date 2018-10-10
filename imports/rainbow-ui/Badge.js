@@ -10,6 +10,12 @@ export default class Badge extends Component {
             case 'success':
                 className += ' badge-success';
                 break;
+            case 'alternative':
+                className += ' badge-alternative';
+                break;
+            case 'danger':
+                className += ' badge-danger';
+                break;
         }
 
         return (
