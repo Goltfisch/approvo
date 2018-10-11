@@ -16,6 +16,9 @@ export default class Badge extends Component {
             case 'danger':
                 className += ' badge-danger';
                 break;
+            case 'info':
+                className += ' badge-info';
+                break;
         }
 
         return (

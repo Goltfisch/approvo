@@ -71,13 +71,12 @@ export class DashboardPage extends Component {
                     switch(item) {
                         case 'approve':
                            return <Badge type='success'>{item}</Badge>
-                           break;
+                        case 'order':
+                           return <Badge type='info'>{item}</Badge>
                         case 'complete':
                            return <Badge type='alternative'>{item}</Badge>
-                           break;
                         case 'decline':
                            return <Badge type='danger'>{item}</Badge>
-                           break;
                         default:
                             return <Badge>{item}</Badge>
                     }
@@ -161,48 +160,58 @@ export class DashboardPage extends Component {
                 break;
 
             case 'order':
-                emails.push({
-                    to: 'michael.moor@goltfisch.de',
-                    template: 'userOrderMsgEmail'
-                });
+                // emails.push({
+                //     to: 'michael.moor@goltfisch.de',
+                //     template: 'userOrderMsgEmail'
+                // });
 
-                emails.push({
-                    to: {
-                        groupKey: 'admin'
-                    },
-                    template: 'adminOrderMsgEmail'
-                });
+                // emails.push({
+                //     to: {
+                //         groupKey: 'admin'
+                //     },
+                //     template: 'adminOrderMsgEmail'
+                // });
 
                 Meteor.call('Approvals.order', documentId, emails, (error, result) => {
-
+                    if(error) {
+                        Bert.alert(error.reason, 'danger', 'growl-top-right');
+                        return;
+                    }
+                    
+                    Bert.alert('Artikel wurde bestellt!', 'info', 'growl-top-right');
                 });
 
                 break;
 
             case 'complete':
-                emails.push({
-                    to: 'michael.moor@goltfisch.de',
-                    template: 'userCompleteMsgEmail'
-                });
+                // emails.push({
+                //     to: 'michael.moor@goltfisch.de',
+                //     template: 'userCompleteMsgEmail'
+                // });
 
-                emails.push({
-                    to: {
-                        groupKey: 'admin'
-                    },
-                    template: 'adminCompleteMsgEmail'
-                });
+                // emails.push({
+                //     to: {
+                //         groupKey: 'admin'
+                //     },
+                //     template: 'adminCompleteMsgEmail'
+                // });
 
                 Meteor.call('Approvals.complete', documentId, emails, (error, result) => {
-
+                    if(error) {
+                        Bert.alert(error.reason, 'danger', 'growl-top-right');
+                        return;
+                    }
+                    
+                    Bert.alert('Freigabe wurde abgeschlossen!', 'info', 'growl-top-right');
                 });
 
                 break;
                 
             case 'decline':
-                emails.push({
-                    to: 'michael.moor@goltfisch.de',
-                    template: 'userDeclineMsgEmail'
-                });
+                // emails.push({
+                //     to: 'michael.moor@goltfisch.de',
+                //     template: 'userDeclineMsgEmail'
+                // });
 
                 Meteor.call('Approvals.decline', documentId, emails, (error, result) => {
                     if(error) {
