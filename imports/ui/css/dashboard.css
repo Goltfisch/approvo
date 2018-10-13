@@ -1,0 +1,23 @@
+.dashboard-page .content-approvals .content-approvals-actions {
+    width: 100%;
+    display: flex;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.dashboard-page .content-approvals .content-approvals-actions .content-approvals-actions-left {
+    width: 50%;
+    display: flex;
+}
+
+.dashboard-page .content-approvals .content-approvals-actions .content-approvals-actions-right {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dashboard-page .content-approvals .content-approvals-actions h2 {
+    display: inline-flex;
+    vertical-align: middle;
+    margin: 0;
+}

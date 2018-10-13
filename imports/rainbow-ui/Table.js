@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 import './css/table.css';
 
 export default class Table extends Component {
+    constructor(props) {
+
+    }
+    
     renderTableHead() {
         return this.props.head.map((headItem) => {
             return <th key={headItem.key} className={this.getColsizeClassName(headItem.col)}>{headItem.content}</th>;

@@ -7,7 +7,7 @@ import {
 import createBrowserHistory from 'history/createBrowserHistory';
 
 import Layout from '/imports/ui/layout/Layout.js';
-import DashboardPage from '/imports/ui/pages/DashboardPage.js';
+import DashboardPageContainer from '/imports/ui/pages/DashboardPageContainer.js';
 import SettingsPage from '/imports/ui/pages/SettingsPage.js';
 import UserManagementPage from '/imports/ui/pages/UserManagementPage.js';
 import LogPage from '/imports/ui/pages/LogPage.js';
@@ -19,7 +19,7 @@ export const renderRoutes = () => (
     <Router history={browserHistory}>
         <Switch>
             <Layout>
-                <Route exact path='/' component={DashboardPage} />
+                <Route exact path='/' component={DashboardPageContainer} />
                 <Route exact path='/settings' component={SettingsPage} />
                 <Route exact path='/usermanagement' component={UserManagementPage} />
                 <Route exact path='/log' component={LogPage} />

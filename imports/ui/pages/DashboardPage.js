@@ -5,6 +5,8 @@ import accounting from 'accounting';
 import { Approvals } from '/imports/api/approvals/approvals.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
 
+import '/imports/ui/css/dashboard.css';
+
 import NewApprovalModal from '/imports/ui/modals/NewApprovalModal.js';
 
 import Table from '/imports/rainbow-ui/Table.js';
@@ -19,6 +21,7 @@ export class DashboardPage extends Component {
         super(props);
 
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
+        this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
         this.state = {
@@ -136,94 +139,57 @@ export class DashboardPage extends Component {
         let emails = [];
         switch(action) {
             case 'approve':
-                // emails.push({
-                //     to: 'michael.moor@goltfisch.de',
-                //     template: 'userApproveMsgEmail'
-                // });
-
-                // emails.push({
-                //     to: {
-                //         groupKey: 'shopping'
-                //     },
-                //     template: 'shoppingApproveMsgEmail'
-                // });
-
                 Meteor.call('Approvals.approve', documentId, emails, (error, result) => {
                     if(error) {
                         Bert.alert(error.reason, 'danger', 'growl-top-right');
                         return;
                     }
                     
-                    Bert.alert('Anfrage wurde freigegeben!', 'info', 'growl-top-right');
+                    Bert.alert('Anfrage wurde freigegeben!', 'success', 'growl-top-right');
                 });
 
                 break;
 
             case 'order':
-                // emails.push({
-                //     to: 'michael.moor@goltfisch.de',
-                //     template: 'userOrderMsgEmail'
-                // });
-
-                // emails.push({
-                //     to: {
-                //         groupKey: 'admin'
-                //     },
-                //     template: 'adminOrderMsgEmail'
-                // });
-
                 Meteor.call('Approvals.order', documentId, emails, (error, result) => {
                     if(error) {
                         Bert.alert(error.reason, 'danger', 'growl-top-right');
                         return;
                     }
                     
-                    Bert.alert('Artikel wurde bestellt!', 'info', 'growl-top-right');
+                    Bert.alert('Artikel wurde bestellt!', 'success', 'growl-top-right');
                 });
 
                 break;
 
             case 'complete':
-                // emails.push({
-                //     to: 'michael.moor@goltfisch.de',
-                //     template: 'userCompleteMsgEmail'
-                // });
-
-                // emails.push({
-                //     to: {
-                //         groupKey: 'admin'
-                //     },
-                //     template: 'adminCompleteMsgEmail'
-                // });
-
                 Meteor.call('Approvals.complete', documentId, emails, (error, result) => {
                     if(error) {
                         Bert.alert(error.reason, 'danger', 'growl-top-right');
                         return;
                     }
                     
-                    Bert.alert('Freigabe wurde abgeschlossen!', 'info', 'growl-top-right');
+                    Bert.alert('Freigabe wurde abgeschlossen!', 'success', 'growl-top-right');
                 });
 
                 break;
                 
             case 'decline':
-                // emails.push({
-                //     to: 'michael.moor@goltfisch.de',
-                //     template: 'userDeclineMsgEmail'
-                // });
-
                 Meteor.call('Approvals.decline', documentId, emails, (error, result) => {
                     if(error) {
                         Bert.alert(error.reason, 'danger', 'growl-top-right');
                         return;
                     }
                     
-                    Bert.alert('Anfrage wurde abgelehnt!', 'info', 'growl-top-right');
+                    Bert.alert('Anfrage wurde abgelehnt!', 'success', 'growl-top-right');
                 });
 
                 break;
         }
+    }
+
+    handleSearchInputChange(searchQuery) {
+        this.props.setSearchQuery(searchQuery);
     }
 
     renderModals() {
@@ -270,8 +236,13 @@ export class DashboardPage extends Component {
                 {this.renderModals()}
                 <div className="content-approvals">
                     <div className='content-approvals-actions'>
-                        <Search />
-                        <Button className="btn primary-btn" handleClick={this.handleNewButtonClick} action='new'><i className="fa fa-plus"></i></Button>
+                        <div className='content-approvals-actions-left'>
+                            <h2>Freigaben</h2>
+                            <Button className="btn primary-btn" handleClick={this.handleNewButtonClick} action='new'><i className="fa fa-plus"></i></Button>
+                        </div>
+                        <div className='content-approvals-actions-right'>
+                            <Search handleSearchInputChange={this.handleSearchInputChange}/>
+                        </div>
                     </div>
                     <Table head={this.getTableHeader()} rows={this.getTableContentRows()}/>
                 </div>
@@ -280,13 +251,19 @@ export class DashboardPage extends Component {
     }
 }
 
-export default withTracker(() => {
-    Meteor.subscribe('dashboard.approvals');
-    Meteor.subscribe('Usermanagement.users');
-    Meteor.subscribe('EmailTemplates');
+export default withTracker((props) => {
+    q = {};
+
+    if(props.searchQuery){
+        q = props.searchQuery;
+    }
+
+    Meteor.subscribe('dashboard.approvals', q);
+
+    const approvals = Approvals.find({ deleted: false }, { sort: { createdAt: -1 }}).fetch();
 
     return {
-      approvals: Approvals.find({deleted: false}, {sort: { createdAt: -1}}).fetch(),
+      approvals,
       currentUser: Meteor.user(),
       emails: EmailTemplates.find().fetch()
     };

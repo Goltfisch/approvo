@@ -1,0 +1,21 @@
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.search-wrapper i {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.search-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 7px 15px;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    outline: 0;
+    font-size: 14px;
+    display: inline-block;
+}
