@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Approvals } from './approvals.js';
 
-Meteor.publish('dashboard.approvals', function (searchQuery) {
+Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
     if(!this.userId) {
         throw new Meteor.Error('not authorized');
     }
@@ -23,8 +23,15 @@ Meteor.publish('dashboard.approvals', function (searchQuery) {
         sort: { createdAt: -1 },
     };
 
-    p.limit = 10;
-    //p.skip = 1;
+    Counts.publish(this, 'dashboardApprovalsCount', Approvals.find(q, p));
+
+    p.limit = 25;
+    
+    currentPage--;
+
+    if(currentPage > 0) {
+        p.skip = currentPage * p.limit;
+    }
     
     return Approvals.find(q, p);
 });

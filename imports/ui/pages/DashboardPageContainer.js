@@ -11,7 +11,7 @@ export default class DashboardPageContainer extends Component {
 
         this.state = {
             searchQuery: '',
-            currentPage: '',
+            currentPage: props.match.params.page,
         };
     }
 

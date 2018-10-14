@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import accounting from 'accounting';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import { Approvals } from '/imports/api/approvals/approvals.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
@@ -22,6 +23,7 @@ export class DashboardPage extends Component {
 
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
         this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+        this.handlePageClick = this.handlePageClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
         this.state = {
@@ -192,6 +194,10 @@ export class DashboardPage extends Component {
         this.props.setSearchQuery(searchQuery);
     }
 
+    handlePageClick(page) {
+        this.props.setCurrentPage(page);
+    }
+
     renderModals() {
         const { modals } = this.state;
 
@@ -231,6 +237,8 @@ export class DashboardPage extends Component {
     }
     
     render() {
+        const { approvalsCount } = this.props;
+
         return (
             <div className='dashboard-page'>
                 {this.renderModals()}
@@ -241,10 +249,15 @@ export class DashboardPage extends Component {
                             <Button className="btn primary-btn" handleClick={this.handleNewButtonClick} action='new'><i className="fa fa-plus"></i></Button>
                         </div>
                         <div className='content-approvals-actions-right'>
-                            <Search handleSearchInputChange={this.handleSearchInputChange}/>
+                            <Search handleSearchInputChange={this.handleSearchInputChange} />
                         </div>
                     </div>
-                    <Table head={this.getTableHeader()} rows={this.getTableContentRows()}/>
+                    <Table 
+                        head={this.getTableHeader()}
+                        rows={this.getTableContentRows()}
+                        totalCount={approvalsCount}
+                        handlePageClick={this.handlePageClick}
+                    />
                 </div>
             </div>
         )
@@ -253,17 +266,23 @@ export class DashboardPage extends Component {
 
 export default withTracker((props) => {
     q = {};
+    p = {};
 
-    if(props.searchQuery){
+    if(props.searchQuery) {
         q = props.searchQuery;
     }
 
-    Meteor.subscribe('dashboard.approvals', q);
+    if(props.currentPage) {
+        p = props.currentPage;
+    }
+
+    Meteor.subscribe('dashboard.approvals', q, p);
 
     const approvals = Approvals.find({ deleted: false }, { sort: { createdAt: -1 }}).fetch();
 
     return {
       approvals,
+      approvalsCount: Counts.get('dashboardApprovalsCount'),
       currentUser: Meteor.user(),
       emails: EmailTemplates.find().fetch()
     };

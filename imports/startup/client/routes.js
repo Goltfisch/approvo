@@ -20,6 +20,7 @@ export const renderRoutes = () => (
         <Switch>
             <Layout>
                 <Route exact path='/' component={DashboardPageContainer} />
+                <Route exact path='/:page' component={DashboardPageContainer} />
                 <Route exact path='/settings' component={SettingsPage} />
                 <Route exact path='/usermanagement' component={UserManagementPage} />
                 <Route exact path='/log' component={LogPage} />

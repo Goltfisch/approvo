@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 
+import Page from '/imports/rainbow-ui/Page.js';
+
 import './css/table.css';
 
 export default class Table extends Component {
-    constructor(props) {
-
-    }
-    
     renderTableHead() {
         return this.props.head.map((headItem) => {
             return <th key={headItem.key} className={this.getColsizeClassName(headItem.col)}>{headItem.content}</th>;
@@ -40,19 +38,41 @@ export default class Table extends Component {
             return <td className={headItem.cls} key={headItem.key}>{item}</td>;
         });
     }
+
+    renderPagination() {
+        const { totalCount, handlePageClick } = this.props;
+
+        let pagination = [];
+
+        for(let i = 1; i <= Math.ceil(totalCount/25); i++) {
+            pagination.push(i);
+        }
+
+        return pagination.map((page, index) => {
+            return <Page key={index} label={page} value={page} onClick={handlePageClick} />;
+        });
+    }
     
     render() {
+
+        const countRows = this.props.rows.length;
+
         return (
-            <table className='table'>
-                <thead>
-                    <tr>
-                        {this.renderTableHead()}
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.renderTableContentRows()}
-                </tbody>
-            </table>
+            <div>
+                { countRows > 0 ?
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                {this.renderTableHead()}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderTableContentRows()}
+                        </tbody>
+                    </table>
+                : 'Keine Einträge vorhanden' }
+                {this.renderPagination()}
+            </div>
         )
     }
 }
