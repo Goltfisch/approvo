@@ -78,39 +78,79 @@ Meteor.startup(() => {
         });
     }
 
-    const admincreatemail = 'Hallo "Admin", ##"User" hat gerade eine Anfrage "Approval.Name" erstellt. ##schaue jetzt in Approvo vorbei um die Anfrage zu bearbeiten!';
-    const adminordermail = 'Hallo "Admin", ##"Einkauf" hat soeben die Freigabe "Approval.Name" von "User" bestellt.';
-    const admincompletemail = 'Hallo, "Admin", ##die Freigabe "Approval.name" von "User" wurde gerade von "Einkauf" entgegen genommen.';
-    const adminroleemail = 'Hallo "Admin", ##"Admin" hat soeben die Rolle von "User" auf "Role" geändert.';
-
-    const shoppingapprovemail = 'Hallo "Shopping", ##"Admin" hat soeben die Anfrage "Approval.Name" von "User" freigegeben. Schau jetzt in Approvo vorbei um die freigabe zu bestellen!';
-
-    const usercreatemail = 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben erfolgreich erstellt.' ;
-    const userapprovemail = 'Hallo "User", ##"Admin" hat soeben deine Anfrage "Approval.Name" freigegeben.' ;
-    const userordermail = 'Hallo "User", ##"Shopping" hat soeben deine Freigabe "Approval.Name" bestellt.' ;
-    const usercompletemail = 'Hallo "User", ##deine Freigabe "Approval.Name" ist soeben angekommen. ##schaue jetzt bei "Shopping" im Büro nach um es abzuholen!' ;
-    const userdeclinemail = 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben von "Admin" abgelehnt.' ;
-    const userroleemail = 'Hallo "User", ##du hast soeben die Rolle "Role" von "Admin" zugewiesen bekommen. ##Nutze deine neu gewonnenen Rechte nicht aus!';
-
-    const mail = {
-        _id: '1',
-        adminCreateMsgEmail: admincreatemail,
-        adminOrderMsgEmail: adminordermail,
-        adminCompleteMsgEmail: admincompletemail,
-        adminRoleMsgEmail: adminroleemail,
-        shoppingApproveMsgEmail: shoppingapprovemail,
-        userCreateMsgEmail: usercreatemail,
-        userApproveMsgEmail: userapprovemail,
-        userOrderMsgEmail: userordermail,
-        userCompleteMsgEmail: usercompletemail,
-        userDeclineMsgEmail: userdeclinemail,
-        userRoleMsgEmail: userroleemail,
-        createdAt: new Date()
-    };
+    const mails = [
+        {
+            _id: '1',
+            templateName: 'adminCreateMail',
+            templateContent: 'Hallo "Admin", ##"User" hat gerade eine Anfrage "Approval.Name" erstellt. ##schaue jetzt in Approvo vorbei um die Anfrage zu bearbeiten!',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '2',
+            templateName: 'adminOrderMail',
+            templateContent: 'Hallo "Admin", ##"Einkauf" hat soeben die Freigabe "Approval.Name" von "User" bestellt.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '3',
+            templateName: 'adminCompleteMail',
+            templateContent: 'Hallo, "Admin", ##die Freigabe "Approval.name" von "User" wurde gerade von "Einkauf" entgegen genommen.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '4',
+            templateName: 'adminRoleMail',
+            templateContent: 'Hallo "Admin", ##"Admin" hat soeben die Rolle von "User" auf "Role" geändert.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '5',
+            templateName: 'shoppingApproveMail',
+            templateContent: 'Hallo "Shopping", ##"Admin" hat soeben die Anfrage "Approval.Name" von "User" freigegeben. Schau jetzt in Approvo vorbei um die freigabe zu bestellen!',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '6',
+            templateName: 'userCreateMail',
+            templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben erfolgreich erstellt.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '7',
+            templateName: 'userApproveMail',
+            templateContent: 'Hallo "User", ##"Admin" hat soeben deine Anfrage "Approval.Name" freigegeben.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '8',
+            templateName: 'userOrderMail',
+            templateContent: 'Hallo "User", ##"Shopping" hat soeben deine Freigabe "Approval.Name" bestellt.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '9',
+            templateName: 'userCompleteMail',
+            templateContent: 'Hallo "User", ##deine Freigabe "Approval.Name" ist soeben angekommen. ##schaue jetzt bei "Shopping" im Büro nach um es abzuholen!',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '10',
+            templateName: 'userDeclineMail',
+            templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben von "Admin" abgelehnt.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '11',
+            templateName: 'userRoleMail',
+            templateContent: 'Hallo "User", ##du hast soeben die Rolle "Role" von "Admin" zugewiesen bekommen. ##Nutze deine neu gewonnenen Rechte nicht aus!',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        }
+    ];
 
     if(EmailTemplates.find().count() < 1) {
-        EmailTemplates.insert(mail);
-
+        mails.forEach(element => {
+            EmailTemplates.insert(element); 
+        });
     }
     
     if(Approvals.find().count() < 1) {
