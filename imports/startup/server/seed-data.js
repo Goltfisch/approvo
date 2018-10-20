@@ -82,7 +82,7 @@ Meteor.startup(() => {
         {
             _id: '1',
             templateName: 'adminCreateMail',
-            templateContent: 'Hallo "Admin", ##"User" hat gerade eine Anfrage "Approval.Name" erstellt. ##schaue jetzt in Approvo vorbei um die Anfrage zu bearbeiten!',
+            templateContent: 'Hallo "Admin", ##"User" hat gerade die Anfrage "Approval.Name" erstellt. ##Schaue jetzt in Approvo vorbei um die Anfrage zu bearbeiten!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
@@ -94,53 +94,47 @@ Meteor.startup(() => {
         {
             _id: '3',
             templateName: 'adminCompleteMail',
-            templateContent: 'Hallo "Admin", ##die Freigabe "Approval.name" von "User" wurde gerade von "Einkauf" entgegen genommen.',
+            templateContent: 'Hallo "Admin", ##die Freigabe "Approval.Name" von "User" wurde gerade von "Einkauf" entgegen genommen.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
             _id: '4',
-            templateName: 'adminRoleMail',
-            templateContent: 'Hallo "Admin", ##"Admin" hat soeben die Rolle von "User" auf "Role" geändert.',
-            createdAt: moment(new Date()).format('DD.MM.YYYY')
-        },
-        {
-            _id: '5',
             templateName: 'shoppingApproveMail',
             templateContent: 'Hallo "Shopping", ##"Admin" hat soeben die Anfrage "Approval.Name" von "User" freigegeben. Schau jetzt in Approvo vorbei um die freigabe zu bestellen!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '6',
+            _id: '5',
             templateName: 'userCreateMail',
             templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben erfolgreich erstellt.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '7',
+            _id: '6',
             templateName: 'userApproveMail',
             templateContent: 'Hallo "User", ##"Admin" hat soeben deine Anfrage "Approval.Name" freigegeben.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '8',
+            _id: '7',
             templateName: 'userOrderMail',
             templateContent: 'Hallo "User", ##"Shopping" hat soeben deine Freigabe "Approval.Name" bestellt.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '9',
+            _id: '8',
             templateName: 'userCompleteMail',
             templateContent: 'Hallo "User", ##deine Freigabe "Approval.Name" ist soeben angekommen. ##Schaue jetzt bei "Shopping" im Büro nach um es abzuholen!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '10',
+            _id: '9',
             templateName: 'userDeclineMail',
             templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben von "Admin" abgelehnt.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
-            _id: '11',
+            _id: '10',
             templateName: 'userRoleMail',
             templateContent: 'Hallo "User", ##du hast soeben die Rolle "Role" von "Admin" zugewiesen bekommen. ##Nutze deine neu gewonnenen Rechte nicht aus!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')

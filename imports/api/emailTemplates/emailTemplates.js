@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
  
-export const EmailTemplates = new Mongo.Collection('EmailTemplates');
+export const EmailTemplates = new Mongo.Collection('Email.Templates');
 
 EmailTemplates.schema = new SimpleSchema( {
     _id: {
