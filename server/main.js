@@ -1,5 +1,5 @@
 import '/imports/startup/server/accounts-config.js';
-//import '/imports/startup/server/email-config.js';
+import '/imports/startup/server/email-config.js';
 
 import '/imports/startup/server/seed-data.js';
 
@@ -25,3 +25,5 @@ import '/imports/api/emailTemplates/emailTemplates-publications.js';
 import '/imports/api/logs/logs.js';
 import '/imports/api/logs/logs-methods.js';
 import '/imports/api/logs/logs-publications.js';
+
+import '/imports/api/mailService.js';

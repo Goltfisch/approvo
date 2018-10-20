@@ -94,7 +94,7 @@ Meteor.startup(() => {
         {
             _id: '3',
             templateName: 'adminCompleteMail',
-            templateContent: 'Hallo, "Admin", ##die Freigabe "Approval.name" von "User" wurde gerade von "Einkauf" entgegen genommen.',
+            templateContent: 'Hallo "Admin", ##die Freigabe "Approval.name" von "User" wurde gerade von "Einkauf" entgegen genommen.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {
@@ -130,7 +130,7 @@ Meteor.startup(() => {
         {
             _id: '9',
             templateName: 'userCompleteMail',
-            templateContent: 'Hallo "User", ##deine Freigabe "Approval.Name" ist soeben angekommen. ##schaue jetzt bei "Shopping" im Büro nach um es abzuholen!',
+            templateContent: 'Hallo "User", ##deine Freigabe "Approval.Name" ist soeben angekommen. ##Schaue jetzt bei "Shopping" im Büro nach um es abzuholen!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
         {

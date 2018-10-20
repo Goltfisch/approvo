@@ -5,7 +5,5 @@ Meteor.publish('Usermanagement.users', function() {
         throw new Meteor.Error('not authorized');
     }
 
-    console.log(Meteor.users.find().fetch());
-
    return Meteor.users.find();
 });

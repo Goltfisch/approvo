@@ -1,3 +1,1 @@
-//import { devVars } from '/settings.js';
-
-//process.env.MAIL_URL = devVars.emailConfig;
+process.env.MAIL_URL = Meteor.settings.emailConfig;
