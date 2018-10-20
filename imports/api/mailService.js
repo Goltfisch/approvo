@@ -13,10 +13,12 @@ Meteor.methods({
             text: ''
         }
 
-        const user = Meteor.user();
         const targetUser = Meteor.users.findOne(data.targetUser);
 
         let approval = Approvals.findOne(data.approval);
+        
+        const user = Meteor.users.findOne(data.user);
+        
 
         let templates = [];
         let admins = [];
@@ -78,7 +80,7 @@ Meteor.methods({
 
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('##', '\n\n');
-                    text = text.replace('"Approval.Name"', approval.name);
+                    text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"User"', approval.owner);
                     text = text.replace('"Einkauf"', approval.lastEditByShopping);
 
@@ -114,11 +116,15 @@ Meteor.methods({
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
 
-                    email.to = Meteor.users.findOne({ name: approval.owner }).emails[0].address;
-                    email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!'
-                    email.text = text;
+                    if(user.createMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
                     
                     break;
                 case 'userApproveMail' :
@@ -129,11 +135,15 @@ Meteor.methods({
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('Approval.Name', approval.name);
 
-                    email.to = Meteor.users.findOne({ name: approval.owner }).emails[0].address;
-                    email.subject = '[Approvo] Anfrage "' + approval.name + '" freigegeben!'
-                    email.text = text;
+                    if(user.approveMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Anfrage "' + approval.name + '" freigegeben!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
 
                     break;
                 case 'userOrderMail' :
@@ -144,11 +154,15 @@ Meteor.methods({
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Shopping"', approval.lastEditByShopping);
 
-                    email.to = Meteor.users.findOne({ name: approval.owner }).emails[0].address;
-                    email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
-                    email.text = text;
+                    if(user.orderMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
 
                     break;
                 case 'userCompleteMail' :
@@ -160,11 +174,15 @@ Meteor.methods({
                     text = text.replace('##', '\n');
                     text = text.replace('"Shopping"', approval.lastEditByShopping);
 
-                    email.to = Meteor.users.findOne({ name: approval.owner }).emails[0].address;
-                    email.subject = '[Approvo] Freigabe "' + approval.name + '" abgeschlossen!'
-                    email.text = text;
+                    if(user.completeMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Freigabe "' + approval.name + '" abgeschlossen!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
 
                     break;
                 case 'userDeclineMail' :
@@ -175,11 +193,15 @@ Meteor.methods({
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
 
-                    email.to = Meteor.users.findOne({ name: approval.owner }).emails[0].address;
-                    email.subject = '[Approvo] Anfrage "' + approval.name + '" abgelehnt!'
-                    email.text = text;
+                    if(user.declineMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Anfrage "' + approval.name + '" abgelehnt!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
 
                     break;
                 case 'userRoleMail' :
@@ -191,11 +213,16 @@ Meteor.methods({
                     text = text.replace('"Admin"', Meteor.user().name);
                     text = text.replace('##', '\n');
 
-                    email.to = targetUser.emails[0].address;
-                    email.subject = '[Approvo] Rolle wurde zu "' + data.userRole + '" geändert!'
-                    email.text = text;
+                    if(user.roleMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Rolle wurde zu "' + data.userRole + '" geändert!'
+                        email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
+
                     break;
             }
         });

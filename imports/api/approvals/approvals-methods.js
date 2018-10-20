@@ -37,6 +37,7 @@ Meteor.methods({
             approval: approvalInsert,
             admins: adminIds,
             shoppings: shoppingIds,
+            user: currentUser._id,
             templateNames: [ 'userCreateMail', 'adminCreateMail']
         }
 
@@ -74,6 +75,7 @@ Meteor.methods({
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -94,6 +96,7 @@ Meteor.methods({
                     approval: approval._id,
                     admins: adminIds,
                     shoppings: shoppingIds,
+                    user: user._id,
                     templateNames: [ 'userApproveMail', 'shoppingApproveMail']
                 }
 
@@ -139,6 +142,7 @@ Meteor.methods({
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -159,6 +163,7 @@ Meteor.methods({
                     approval: approval._id,
                     admins: adminIds,
                     shoppings: shoppingIds,
+                    user: user._id,
                     templateNames: [ 'userOrderMail', 'adminOrderMail']
                 }
 
@@ -200,6 +205,7 @@ Meteor.methods({
                 Approvals.update(documentId, { $set: approval });
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -220,6 +226,7 @@ Meteor.methods({
                     approval: approval._id,
                     admins: adminIds,
                     shoppings: shoppingIds,
+                    user: user._id,
                     templateNames: [ 'userCompleteMail', 'adminCompleteMail']
                 }
 
@@ -257,6 +264,7 @@ Meteor.methods({
                 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -277,6 +285,7 @@ Meteor.methods({
                     approval: approval._id,
                     admins: adminIds,
                     shoppings: shoppingIds,
+                    user: user._id,
                     templateNames: [ 'userDeclineMail']
                 }
 

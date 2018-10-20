@@ -56,6 +56,7 @@ Meteor.methods({
                         targetUser: user._id,
                         userRole: user.userRole,
                         admins: adminIds,
+                        user: user._id,
                         templateNames: [ 'userRoleMail' ]
                     }
 
