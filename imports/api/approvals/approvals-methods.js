@@ -48,14 +48,11 @@ Meteor.methods({
         });
 
         const newLog = {
-            date: moment(new Date()).format('DD.MM.YYYY'),
-            time: moment(new Date()).format('H:m:s'),
-            user: currentUser.name,
             action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' erstellt.',
-            createdAt: new Date()
+            type: 'info'
         }
 
-        Meteor.call('Logs.insert', newLog);
+        Meteor.call('Logs.insert', newLog.action, newLog.type);
 
         return approvalInsert;
     },
@@ -107,14 +104,11 @@ Meteor.methods({
                 });
 
                 const newLog = {
-                    date: moment(new Date()).format('DD.MM.YYYY'),
-                    time: moment(new Date()).format('H:m:s'),
-                    user: currentUser.name,
                     action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' freigegeben.',
-                    createdAt: new Date()
+                    type: 'info'
                 }
         
-                Meteor.call('Logs.insert', newLog);
+                Meteor.call('Logs.insert', newLog.action, newLog.type);
 
             }else {
                 throw new Meteor.Error('not-possible', 'This action is not possible!');
@@ -174,14 +168,11 @@ Meteor.methods({
                 });
 
                 const newLog = {
-                    date: moment(new Date()).format('DD.MM.YYYY'),
-                    time: moment(new Date()).format('H:m:s'),
-                    user: currentUser.name,
                     action: currentUser.userRole + ' ' + currentUser.name + ' hat die Freigabe ' + approval.name + ' bestellt.',
-                    createdAt: new Date()
+                    type: 'info'
                 }
         
-                Meteor.call('Logs.insert', newLog);
+                Meteor.call('Logs.insert', newLog.action, newLog.type);
             }
         }
     },
@@ -237,14 +228,11 @@ Meteor.methods({
                 });
 
                 const newLog = {
-                    date: moment(new Date()).format('DD.MM.YYYY'),
-                    time: moment(new Date()).format('H:m:s'),
-                    user: currentUser.name,
                     action: 'Freigabe ' + approval.name + ' ist angekommen.',
-                    createdAt: new Date()
+                    type: 'info'
                 }
         
-                Meteor.call('Logs.insert', newLog);
+                Meteor.call('Logs.insert', newLog.action, newLog.type);
             }
         }
     },
@@ -296,14 +284,11 @@ Meteor.methods({
                 });
 
                 const newLog = {
-                    date: moment(new Date()).format('DD.MM.YYYY'),
-                    time: moment(new Date()).format('H:m:s'),
-                    user: currentUser.name,
                     action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' abgelehnt.',
-                    createdAt: new Date()
+                    type: 'info'
                 }
         
-                Meteor.call('Logs.insert', newLog);
+                Meteor.call('Logs.insert', newLog.action, newLog.type);
             }else {
                 throw new Meteor.Error('not-possible');
             }
