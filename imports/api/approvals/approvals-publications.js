@@ -4,7 +4,7 @@ import { Approvals } from './approvals.js';
 
 Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
     if(!this.userId) {
-        throw new Meteor.Error('not authorized');
+        throw new Meteor.Error('not authorized', 'You are not authorized!');
     }
 
     let regex = new RegExp(searchQuery, 'i');

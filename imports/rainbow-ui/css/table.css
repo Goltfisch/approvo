@@ -15,6 +15,9 @@ table.table th {
     font-size: 14px;
     text-align: left;
     padding: 5px 15px;
+    line-height: 30px;
+    background: #111111;
+    color: #FFFFFF;
 }
 
 table.table td {
@@ -22,6 +25,11 @@ table.table td {
     color: black;
     padding: 0 15px;
     font-size: 14px;
+    line-height: 30px;
+}
+
+table.table td a {
+    color: #006CA7;
 }
 
 table.table tr th.col-size-1, 

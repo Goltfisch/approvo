@@ -1,0 +1,23 @@
+.usermanagement-page .content-users .content-users-actions {
+    width: 100%;
+    display: flex;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.usermanagement-page .content-users .content-users-actions .content-users-actions-left {
+    width: 50%;
+    display: flex;
+}
+
+.usermanagement-page .content-users .content-users-actions .content-users-actions-right {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.usermanagement-page .content-users .content-users-actions h2 {
+    display: inline-flex;
+    vertical-align: middle;
+    margin: 0;
+}

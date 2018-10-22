@@ -11,6 +11,13 @@
     width: 30px;
     height: 30px;
     cursor: pointer;
+    line-height: 30px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.pagination .page:last-child {
+    margin-right: 0;
 }
 
 .pagination .page.active {
