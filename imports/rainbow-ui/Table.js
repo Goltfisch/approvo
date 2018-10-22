@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Page from '/imports/rainbow-ui/Page.js';
 
 import './css/table.css';
+import './css/pagination.css';
 
 export default class Table extends Component {
     renderTableHead() {
@@ -40,7 +41,7 @@ export default class Table extends Component {
     }
 
     renderPagination() {
-        const { totalCount, handlePageClick } = this.props;
+        const { totalCount, handlePageClick, currentPage } = this.props;
 
         let pagination = [];
 
@@ -49,7 +50,7 @@ export default class Table extends Component {
         }
 
         return pagination.map((page, index) => {
-            return <Page key={index} label={page} value={page} onClick={handlePageClick} />;
+            return <Page key={index} label={page} value={page} onClick={handlePageClick} isActive={currentPage == page ? true : false} />;
         });
     }
     
@@ -71,7 +72,9 @@ export default class Table extends Component {
                         </tbody>
                     </table>
                 : 'Keine Einträge vorhanden' }
-                {this.renderPagination()}
+                <div className='pagination'>
+                    {this.renderPagination()}
+                </div>
             </div>
         )
     }

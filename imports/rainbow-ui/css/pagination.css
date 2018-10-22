@@ -1,0 +1,24 @@
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.pagination .page {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.pagination .page.active {
+    background-color: #006CA7;
+    color: white;
+}
+
+.pagination .page:hover {
+    background-color: #004367;
+    color: white;
+}

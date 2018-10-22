@@ -12,10 +12,12 @@ export default class Page extends Component {
     }
     
     render() {
-        const { label } = this.props;
+        const { label, isActive } = this.props;
+        let classNames = 'page';
+        classNames += isActive ? ' active' : '';
         
         return (
-            <div className='page' onClick={this.onClick}>
+            <div className={classNames} onClick={this.onClick}>
                 {label}
             </div>
         );

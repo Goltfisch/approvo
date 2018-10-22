@@ -237,7 +237,7 @@ export class DashboardPage extends Component {
     }
     
     render() {
-        const { approvalsCount } = this.props;
+        const { approvalsCount, currentPage } = this.props;
 
         return (
             <div className='dashboard-page'>
@@ -257,6 +257,7 @@ export class DashboardPage extends Component {
                         rows={this.getTableContentRows()}
                         totalCount={approvalsCount}
                         handlePageClick={this.handlePageClick}
+                        currentPage={currentPage}
                     />
                 </div>
             </div>
