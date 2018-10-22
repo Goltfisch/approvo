@@ -41,44 +41,29 @@ Meteor.methods({
             if(user.oldRole) {
                 if(user.oldRole != user.userRole){
                     delete user.oldRole;
-                    let emails = [];
-    
-                    emails.push({
-                        to: {
-                            groupKey: 'admin'
-                        },
-                        template: 'adminRoleMsgEmail'
-                    });
-    
-                    if(user.roleMsgState) {
-                        emails.push({
-                            to: user.emails[0].address,
-                            template: 'userRoleMsgEmail'
+                    
+                    const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+
+                    let adminIds = [];
+
+                    if(admins) {
+                        admins.forEach(element => {
+                            adminIds.push(element._id);
                         });
                     }
-    
-                    emails.forEach(element => {
-                        let email = {};
-                        let data = {};
-    
-                        email.from = 'noreply@approvo.com';
-                        email.subject = '[Approvo] Rolle wurde zu "' + user.userRole + '"geändert!';
-    
-                        if(typeof element.to == 'object' && element.to.groupKey) {
-                            let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                            email.to = groupKeyUser.emails[0].address;
-                            data.groupKeyName = groupKeyUser.username;
-                        }else {
-                            email.to = element.to
+
+                    emailTo = {
+                        targetUser: user._id,
+                        userRole: user.userRole,
+                        admins: adminIds,
+                        user: user._id,
+                        templateNames: [ 'userRoleMail' ]
+                    }
+
+                    Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                        if(error) {
+                            console.log('Fehler: ', error);
                         }
-    
-                        data.targetUserName = user.name;
-                        data.adminName = currentUser.name;
-                        data.roleName = user.userRole;
-    
-                        email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-    
-                        Meteor.call('EmailTemplates.sendEmail', email);
                     });
     
                     const newLog = {

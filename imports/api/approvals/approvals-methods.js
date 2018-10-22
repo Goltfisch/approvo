@@ -11,36 +11,41 @@ Meteor.methods({
         approval.state = 'requested';
         approval.deleted = false;
         approval.createdAt = new Date();
+        approval.owner = Meteor.user().name;
 
         const currentUser = Meteor.user();
-
         const approvalInsert = Approvals.insert(approval);
+        const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+        const shoppings = Meteor.users.find({ userRole: 'shopping' });
 
-        // emails.forEach(element => {
-        //     let email = {};
-        //     let data = {};
+        let adminIds = [];
+        let shoppingIds = [];
 
-        //     email.from = 'noreply@approvo.com';
-        //     email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!';
+        if(admins) {
+            admins.forEach(element => {
+                adminIds.push(element._id);
+            });
+        }
 
-        //     if(typeof element.to == 'object' && element.to.groupKey) {
-        //         let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-        //         email.to = groupKeyUser.emails[0].address;
-        //         data.groupKeyName = groupKeyUser.username;
-        //     }else {
-        //         email.to = element.to
-        //     }
+        if(shoppings) {
+            shoppings.forEach(element => {
+                shoppingIds.push(element._id);
+            });
+        }
 
-        //     var admin = Meteor.users.findOne({ userRole: 'admin' });
+        emailTo = {
+            approval: approvalInsert,
+            admins: adminIds,
+            shoppings: shoppingIds,
+            user: currentUser._id,
+            templateNames: [ 'userCreateMail', 'adminCreateMail']
+        }
 
-        //     data.ownerName = currentUser.name;
-        //     data.approvalName = approval.name;
-        //     data.adminName = admin.name;
-
-        //     email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-
-        //     Meteor.call('EmailTemplates.sendEmail', email);
-        // });
+        Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+            if(error) {
+                console.log('Fehler: ', error);
+            }
+        });
 
         const newLog = {
             date: moment(new Date()).format('DD.MM.YYYY'),
@@ -54,15 +59,6 @@ Meteor.methods({
 
         return approvalInsert;
     },
-    'Approvals.update'(approval) {
-        const currentUser = Meteor.user();
-
-        if(currentUser.userRole != 'admin') {
-            throw new Meteor.Error('not-allowed', 'You are not allowed!');
-        }else {
-            return Approvals.update(approval._id, { $set: approval });
-        }
-    },
     'Approvals.approve'(documentId, emails) {
         
         const currentUser = Meteor.user();
@@ -73,37 +69,42 @@ Meteor.methods({
         } else {
             if(approval && approval.state && approval.state === 'requested') {
                 approval.lastEditByAdmin = currentUser.name;
-
                 approval.state = 'approve';
 
                 Approvals.update(documentId, { $set: approval });
 
-                // emails.forEach(element => {
-                //     let email = {};
-                //     let data = {};
+                const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
-                //     email.from = 'noreply@approvo.com';
-                //     email.subject = '[Approvo] Anfrage "'+ approval.name +'" freigegeben!';
+                let adminIds = [];
+                let shoppingIds = [];
 
-                //     if(typeof element.to === 'object' && element.to.groupKey) {
-                //         let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                //         email.to = groupKeyUser.emails[0].address;
-                //         data.groupKeyName = groupKeyUser.username;
-                //     }else{
-                //         email.to = element.to;
-                //     }
+                if(admins) {
+                    admins.forEach(element => {
+                        adminIds.push(element._id);
+                    });
+                }
 
-                //     roleUser = Meteor.users.findOne({ userRole: element.to.groupKey })
+                if(shoppings) {
+                    shoppings.forEach(element => {
+                        shoppingIds.push(element._id);
+                    });
+                }
 
-                //     data.ownerName = approval.owner;
-                //     data.shoppingName = roleUser.name;
-                //     data.adminName = approval.lastEditByAdmin;
-                //     data.approvalName = approval.name;
+                emailTo = {
+                    approval: approval._id,
+                    admins: adminIds,
+                    shoppings: shoppingIds,
+                    user: user._id,
+                    templateNames: [ 'userApproveMail', 'shoppingApproveMail']
+                }
 
-                //     email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-
-                //     Meteor.call('EmailTemplates.sendEmail', email);
-                // });
+                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
+                    }
+                });
 
                 const newLog = {
                     date: moment(new Date()).format('DD.MM.YYYY'),
@@ -121,6 +122,7 @@ Meteor.methods({
         }
     },
     'Approvals.order'(documentId, emails) {
+
         const currentUser = Meteor.user();
         approval = Approvals.findOne(documentId);
 
@@ -137,36 +139,38 @@ Meteor.methods({
                 approval.state = 'order';
 
                 Approvals.update(documentId, { $set: approval });
-                emails.forEach(element => {
-                    let email = {};
-                    let data = {};
 
-                    email.from = 'noreply@approvo.com';
-                    email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!';
+                const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
-                    if(typeof element.to == 'object' && element.to.groupKey) {
-                        let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                        email.to = groupKeyUser.emails[0].address;
-                        data.groupKeyName = groupKeyUser.username;
-                    }else {
-                        email.to = element.to
+                let adminIds = [];
+                let shoppingIds = [];
+
+                if(admins) {
+                    admins.forEach(element => {
+                        adminIds.push(element._id);
+                    });
+                }
+
+                if(shoppings) {
+                    shoppings.forEach(element => {
+                        shoppingIds.push(element._id);
+                    });
+                }
+
+                emailTo = {
+                    approval: approval._id,
+                    admins: adminIds,
+                    shoppings: shoppingIds,
+                    user: user._id,
+                    templateNames: [ 'userOrderMail', 'adminOrderMail']
+                }
+
+                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
                     }
-
-                    roleUser = Meteor.users.findOne({ userRole: element.to.groupKey })
-
-                    data.ownerName = approval.owner;
-                    data.adminName = roleUser.name;
-                    data.approvalName = approval.name;
-
-                    if(approval.lastEditByShopping) {
-                        data.shoppingName = approval.lastEditByShopping;
-                    }else {
-                        data.shoppingName = approval.lastEditByAdmin;
-                    }
-
-                    email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-
-                    Meteor.call('EmailTemplates.sendEmail', email);
                 });
 
                 const newLog = {
@@ -182,6 +186,7 @@ Meteor.methods({
         }
     },
     'Approvals.complete'(documentId, emails) {
+
         const currentUser = Meteor.user();
         approval = Approvals.findOne(documentId);
 
@@ -198,34 +203,37 @@ Meteor.methods({
                 approval.state = 'complete';
 
                 Approvals.update(documentId, { $set: approval });
-                emails.forEach(element => {
-                    let email = {};
-                    let data = {};
+                const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
 
-                    email.from = 'noreply@approvo.com';
-                    email.subject = '[Approvo] Freigabe "' + approval.name + '" angekommen!';
+                let adminIds = [];
+                let shoppingIds = [];
 
-                    if(typeof element.to == 'object' && element.to.groupKey) {
-                        let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                        email.to = groupKeyUser.emails[0].address;
-                        data.groupKeyName = groupKeyUser.username;
-                    }else {
-                        email.to = element.to
+                if(admins) {
+                    admins.forEach(element => {
+                        adminIds.push(element._id);
+                    });
+                }
+
+                if(shoppings) {
+                    shoppings.forEach(element => {
+                        shoppingIds.push(element._id);
+                    });
+                }
+
+                emailTo = {
+                    approval: approval._id,
+                    admins: adminIds,
+                    shoppings: shoppingIds,
+                    user: user._id,
+                    templateNames: [ 'userCompleteMail', 'adminCompleteMail']
+                }
+
+                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
                     }
-
-                    data.ownerName = approval.owner;
-                    data.adminName = approval.lastEditByAdmin;
-                    data.approvalName = approval.name;
-
-                    if(approval.lastEditByShopping) {
-                        data.shoppingName = approval.lastEditByShopping;
-                    }else {
-                        data.shoppingName = approval.lastEditByAdmin;
-                    }
-
-                    email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-
-                    Meteor.call('EmailTemplates.sendEmail', email);
                 });
 
                 const newLog = {
@@ -241,6 +249,7 @@ Meteor.methods({
         }
     },
     'Approvals.decline'(documentId, emails) {
+
         const currentUser = Meteor.user();
         approval = Approvals.findOne(documentId);
 
@@ -249,43 +258,52 @@ Meteor.methods({
         }else {
             if(approval && approval.state && approval.state == 'requested') {
                 approval.lastEditByAdmin = currentUser.name;
-
                 approval.state = 'decline';
 
                 Approvals.update(documentId, { $set: approval });
-                emails.forEach(element => {
-                    let email = {};
-                    let data = {};
-
-                    email.from = 'noreply@approvo.com';
-                    email.subject = '[Approvo] Anfrage "' + approval.name + '" abgelehnt!';
-
-                    if(typeof element.to == 'object' && element.to.groupKey) {
-                        let groupKeyUser = Meteor.users.findOne({ userRole: element.to.groupKey });
-                        email.to = groupKeyUser.emails[0].address;
-                        data.groupKeyName = groupKeyUser.username;
-                    }else {
-                        email.to = element.to
-                    }
-
-                    data.ownerName = approval.owner;
-                    data.adminName = approval.lastEditByAdmin;
-                    data.approvalName = approval.name;
-
-                    email.text = Meteor.call('EmailTemplates.renderEmail', element.template, data);
-
-                    Meteor.call('EmailTemplates.sendEmail', email);
                 
-                    const newLog = {
-                        date: moment(new Date()).format('DD.MM.YYYY'),
-                        time: moment(new Date()).format('H:m:s'),
-                        user: currentUser.name,
-                        action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' abgelehnt.',
-                        createdAt: new Date()
+                const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
+                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const user = Meteor.users.findOne({ name: approval.owner });
+
+                let adminIds = [];
+                let shoppingIds = [];
+
+                if(admins) {
+                    admins.forEach(element => {
+                        adminIds.push(element._id);
+                    });
+                }
+
+                if(shoppings) {
+                    shoppings.forEach(element => {
+                        shoppingIds.push(element._id);
+                    });
+                }
+
+                emailTo = {
+                    approval: approval._id,
+                    admins: adminIds,
+                    shoppings: shoppingIds,
+                    user: user._id,
+                    templateNames: [ 'userDeclineMail']
+                }
+
+                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
                     }
-            
-                    Meteor.call('Logs.insert', newLog);
                 });
+
+                const newLog = {
+                    date: moment(new Date()).format('DD.MM.YYYY'),
+                    time: moment(new Date()).format('H:m:s'),
+                    user: currentUser.name,
+                    action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' abgelehnt.',
+                    createdAt: new Date()
+                }
+        
+                Meteor.call('Logs.insert', newLog);
             }else {
                 throw new Meteor.Error('not-possible');
             }
