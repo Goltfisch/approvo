@@ -74,14 +74,16 @@ export class DashboardPage extends Component {
                 col: '1',
                 renderer: (item) => {
                     switch(item) {
+                        case 'requested':
+                           return <Badge>Angefragt</Badge>
                         case 'approve':
-                           return <Badge type='success'>{item}</Badge>
+                           return <Badge type='success'>Freigegeben</Badge>
                         case 'order':
-                           return <Badge type='info'>{item}</Badge>
+                           return <Badge type='info'>Bestellt</Badge>
                         case 'complete':
-                           return <Badge type='alternative'>{item}</Badge>
+                           return <Badge type='alternative'>Abgeschlossen</Badge>
                         case 'decline':
-                           return <Badge type='danger'>{item}</Badge>
+                           return <Badge type='danger'>Abgelehnt</Badge>
                         default:
                             return <Badge>{item}</Badge>
                     }
