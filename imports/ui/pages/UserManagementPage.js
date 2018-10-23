@@ -4,6 +4,7 @@ import { withTracker } from 'meteor/react-meteor-data';
 import '/imports/ui/css/usermanagement.css';
 
 import NewUserModal from '/imports/ui/modals/NewUserModal.js';
+import UpdatePasswordModal from '/imports/ui/modals/UpdatePasswordModal.js';
 
 import Button from '/imports/rainbow-ui/Button.js';
 import Search from '/imports/rainbow-ui/Search.js';
@@ -15,6 +16,7 @@ export class UserManagementPage extends Component {
         super(props);
 
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
+        this.handlePasswordButtonClick = this.handlePasswordButtonClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
         this.state = {
@@ -23,6 +25,12 @@ export class UserManagementPage extends Component {
                     id: 'userManagementAddUserModal',
                     content: <NewUserModal cancelButtonClick={this.closeModal} />,
                     visible: false,
+                },
+                {
+                    id: 'userManagementSetPasswordModal',
+                    content: <UpdatePasswordModal cancelButtonClick={this.closeModal} />,
+                    visible: false,
+                    data: {}
                 }
             ]
         }
@@ -41,14 +49,26 @@ export class UserManagementPage extends Component {
                 col: '2'
             },
             {
-                key: 'email',
+                key: 'emails',
                 content: 'Email',
-                col: '2'
+                col: '2',
+                renderer: (item) => {
+                    return item && item[0] && item[0].address;
+                }
             },
             {
                 key: 'password',
                 content: 'Password',
-                col: '2'
+                col: '2',
+                renderer: (item) => {
+                    return (<Button 
+                                className='btn' 
+                                handleClick={this.handlePasswordButtonClick}
+                                documentId={item.userId}
+                            >
+                                <i className="fas fa-key"></i>
+                            </Button>);
+                }
             },
             {
                 key: 'userRole',
@@ -67,8 +87,13 @@ export class UserManagementPage extends Component {
         let { users } = this.props;
 
         return users.map((user) => {
+            user.password = { userId: user._id };
             return Object.assign({}, user, {
-                actions: <div>Button1</div>
+                actions: <Button 
+                            className='btn' 
+                            handleClick={this.handleEditButtonClick}
+                            action='edit'
+                         ><i className="far fa-edit"></i></Button>
             })
         });
     }
@@ -78,9 +103,15 @@ export class UserManagementPage extends Component {
 
         return modals.map((modal, index) => {
             if(modal.visible) {
-                return (<Modal key={index} closeModal={this.closeModal}>
-                    {modal.content}
-                </Modal>);
+                return (
+                    <Modal 
+                        key={index} 
+                        closeModal={this.closeModal} 
+                        modalData={modal.data}
+                    >
+                        {modal.content}
+                    </Modal>
+                );
             }
         })
     }
@@ -99,10 +130,13 @@ export class UserManagementPage extends Component {
         });
     }
 
-    closeModal() {
+    handlePasswordButtonClick(documentId, action) {
         this.setState((state) => {
             return state.modals.map((modal, index) => {
-                if(modal.id === 'userManagementAddUserModal') {
+                if(modal.id === 'userManagementSetPasswordModal') {
+                    modal.visible = true;
+                    modal.data = { userId: documentId };
+                } else {
                     modal.visible = false;
                 }
 
@@ -111,8 +145,17 @@ export class UserManagementPage extends Component {
         });
     }
 
-    render() {
-        
+    closeModal() {
+        this.setState((state) => {
+            return state.modals.map((modal, index) => {
+                modal.visible = false;
+
+                return modal;
+            });
+        });
+    }
+
+    render() {  
         return (
             <div className='usermanagement-page'>
                 {this.renderModals()}

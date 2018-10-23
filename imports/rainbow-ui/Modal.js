@@ -24,6 +24,10 @@ export default class Modal extends Component {
     }
 
     render() {
+        const childWithProp = React.Children.map(this.props.children, (child) => {
+            return React.cloneElement(child, {modalData: this.props.modalData});
+        });
+
         return (
             <div className='modal-wrapper'>
                 <div className='modal-overlay'>
@@ -31,7 +35,7 @@ export default class Modal extends Component {
                         <div className='modal-close-btn' onClick={this.handleClick}>
                             <i className='far fa-times-circle'></i>
                         </div>
-                        {this.props.children}
+                        {childWithProp}
                     </div>
                 </div>
             </div>

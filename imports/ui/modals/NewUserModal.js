@@ -39,7 +39,7 @@ class NewUserModal extends Component {
                                 return;
                             }
 
-                            Bert.alert('Benutzer wurde erfolgreich erstellt!', 'ino', 'growl-top-right');
+                            Bert.alert('Benutzer wurde erfolgreich erstellt!', 'info', 'growl-top-right');
                             props.cancelButtonClick();
                         });
                     }
