@@ -11,7 +11,7 @@ export default class UpdatePasswordModal extends Component {
             headline: 'Passwort zurücksetzen',
             description: 'Setze das Passwort zurück.',
             inputs: [
-                { label: 'Passwort', type: 'text', name: 'password', placeholder: 'Wie sieht das neue Passwort aus?' }
+                { label: 'Passwort', type: 'password', name: 'password', placeholder: 'Wie sieht das neue Passwort aus?' }
             ],
             buttons: [
                 {
