@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Counts } from 'meteor/tmeasday:publish-counts';
 
 import '/imports/ui/css/usermanagement.css';
 
@@ -15,6 +16,8 @@ export class UserManagementPage extends Component {
     constructor(props) {
         super(props);
 
+        this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+        this.handlePageClick = this.handlePageClick.bind(this);
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
         this.handlePasswordButtonClick = this.handlePasswordButtonClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -98,6 +101,14 @@ export class UserManagementPage extends Component {
         });
     }
 
+    handleSearchInputChange(searchQuery) {
+        this.props.setSearchQuery(searchQuery);
+    }
+
+    handlePageClick(page) {
+        this.props.setCurrentPage(page);
+    }
+
     renderModals() {
         const { modals } = this.state;
 
@@ -155,7 +166,9 @@ export class UserManagementPage extends Component {
         });
     }
 
-    render() {  
+    render() {
+        const { usersCount, currentPage } = this.props;
+
         return (
             <div className='usermanagement-page'>
                 {this.renderModals()}
@@ -178,6 +191,9 @@ export class UserManagementPage extends Component {
                     <Table 
                         head={this.getTableHeader()}
                         rows={this.getTableContentRows()}
+                        totalCount={usersCount}
+                        handlePageClick={this.handlePageClick}
+                        currentPage={currentPage}
                     />
                 </div>
             </div>
@@ -193,14 +209,16 @@ export default withTracker((props) => {
         q = props.searchQuery;
     }
 
-    // if(props.currentPage) {
-    //     p = props.currentPage;
-    // }
+    if(props.currentPage) {
+        p = props.currentPage;
+    }
 
     Meteor.subscribe('Usermanagement.users', q, p);
-
+    
+    const users = Meteor.users.find({}, { sort: { createdAt: -1 }}).fetch();
+    
     return {
-        users: Meteor.users.find().fetch(),
-        currentUser: Meteor.user(),
+        users,
+        usersCount: Counts.get('userManagementUsersCount')
     };
 })(UserManagementPage);

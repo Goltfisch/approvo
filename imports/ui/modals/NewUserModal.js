@@ -16,7 +16,7 @@ class NewUserModal extends Component {
                 { label: 'Name', type: 'text', name: 'name', placeholder: 'Wie heißt der Benutzer?' },
                 { label: 'Benutzername', type: 'text', name: 'username', placeholder: 'Welchen Benutzernamen soll der Benutzer bekommen?' },
                 { label: 'Email', type: 'text', name: 'email', placeholder: 'Welche Email Adresse verwendet der Benutzer?' },
-                { label: 'Password', type: 'text', name: 'password', placeholder: 'Welches initiale Passwort soll der Benutzer verwenden?' },
+                { label: 'Password', type: 'password', name: 'password', placeholder: 'Welches initiale Passwort soll der Benutzer verwenden?' },
                 { label: 'Benutzerrolle', type: 'text', name: 'userRole' },
             ],
             buttons: [

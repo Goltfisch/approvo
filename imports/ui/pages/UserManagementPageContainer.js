@@ -11,7 +11,7 @@ export default class UserManagementPageContainer extends Component {
 
         this.state = {
             searchQuery: '',
-            currentPage: 1
+            currentPage: props.match.params.page ? props.match.params.page : 1,
         };
     }
 
@@ -28,7 +28,7 @@ export default class UserManagementPageContainer extends Component {
     }
 
     render() {
-        const { searchQuery, currentPage } = this.props;
+        const { searchQuery, currentPage } = this.state;
 
         return (
             <div className='usermanagement-page-container'>

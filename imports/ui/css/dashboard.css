@@ -1,8 +1,12 @@
+.dashboard-page-container {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
 .dashboard-page .content-approvals .content-approvals-actions {
     width: 100%;
     display: flex;
     margin-bottom: 25px;
-    margin-top: 25px;
 }
 
 .dashboard-page .content-approvals .content-approvals-actions .content-approvals-actions-left {

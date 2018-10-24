@@ -28,5 +28,5 @@ Meteor.publish('Usermanagement.users', function(searchQuery, currentPage) {
         p.skip = currentPage * p.limit;
     }
 
-   return Meteor.users.find(q, p);
+    return Meteor.users.find(q, p);
 });

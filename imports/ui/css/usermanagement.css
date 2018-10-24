@@ -1,8 +1,12 @@
+.usermanagement-page-container {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
 .usermanagement-page .content-users .content-users-actions {
     width: 100%;
     display: flex;
     margin-bottom: 25px;
-    margin-top: 25px;
 }
 
 .usermanagement-page .content-users .content-users-actions .content-users-actions-left {
