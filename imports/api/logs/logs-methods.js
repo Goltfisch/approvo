@@ -8,9 +8,10 @@ Meteor.methods({
         const log = {
             action: action,
             type: type,
-            user: Meteor.user().name + ' ' + Meteor.user().username,
+            user: Meteor.user().name + ' - ' + Meteor.user().username,
             time: moment(new Date()).format('H:m:s'),
-            createdAt: moment(new Date()).format('DD.MM.YYYY')
+            date: moment(new Date()).format('DD.MM.YYYY'),
+            createdAt: new Date()
         }
 
         return Logs.insert(log);
