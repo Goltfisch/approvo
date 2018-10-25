@@ -8,6 +8,9 @@ Logs.schema = new SimpleSchema( {
         type: String,
         regEx: SimpleSchema.RegEx.Id,
     },
+    type: {
+        type: String,
+    },
     date: {
         type: String,
     },
@@ -26,6 +29,7 @@ Logs.schema = new SimpleSchema( {
 });
 
 Logs.publicFields = {
+    type: 1,
     date: 1,
     time: 1,
     user: 1,

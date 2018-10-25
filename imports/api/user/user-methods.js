@@ -7,14 +7,11 @@ Meteor.methods({
         const currentUser = Meteor.user();
 
         const newLog = {
-            date: moment(new Date()).format('DD.MM.YYYY'),
-            time: moment(new Date()).format('H:m:s'),
-            user: currentUser.name,
             action: 'Admin ' + currentUser.name + ' hat den Benutzer ' + user.name + ' angelegt.',
-            createdAt: new Date()
+            type: 'info'
         }
 
-        Meteor.call('Logs.insert', newLog);
+        Meteor.call('Logs.insert', newLog.action, newLog.type);
 
         return createUser;
     },
@@ -65,16 +62,13 @@ Meteor.methods({
                             console.log('Fehler: ', error);
                         }
                     });
-    
+
                     const newLog = {
-                        date: moment(new Date()).format('DD.MM.YYYY'),
-                        time: moment(new Date()).format('H:m:s'),
-                        user: currentUser.name,
                         action: 'Admin ' + currentUser.name + ' hat die Rolle von ' + user.name + ' in ' + user.userRole + ' geändert.',
-                        createdAt: new Date()
+                        type: 'info'
                     }
             
-                    Meteor.call('Logs.insert', newLog);
+                    Meteor.call('Logs.insert', newLog.action, newLog.type);
                 }
             }else {
 
@@ -89,14 +83,11 @@ Meteor.methods({
         const currentUser = Meteor.user();
 
         const newLog = {
-            date: moment(new Date()).format('DD.MM.YYYY'),
-            time: moment(new Date()).format('H:m:s'),
-            user: currentUser.name,
             action: 'Admin ' + currentUser.name + ' hat den Benutzer ' + user.name + ' gelöscht.',
-            createdAt: new Date()
+            type: 'info'
         }
 
-        Meteor.call('Logs.insert', newLog);
+        Meteor.call('Logs.insert', newLog.action, newLog.type);
 
         return deleteResult;
     },
@@ -106,13 +97,10 @@ Meteor.methods({
         const currentUser = Meteor.user();
 
         const newLog = {
-            date: moment(new Date()).format('DD.MM.YYYY'),
-            time: moment(new Date()).format('H:m:s'),
-            user: currentUser.name,
             action: 'Admin ' + currentUser.name + ' hat das Passwort von ' + user.name + ' geändert.',
-            createdAt: new Date()
+            type: 'info'
         }
 
-        Meteor.call('Logs.insert', newLog);
+        Meteor.call('Logs.insert', newLog.action, newLog.type);
     }
 });

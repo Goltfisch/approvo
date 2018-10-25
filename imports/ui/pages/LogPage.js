@@ -9,15 +9,17 @@ export class LogPage extends Component {
     constructor() {
         super();
         this.state = {
-            search: ''          
+            search: ''
         };
     }
 
     updateSearch(event) {
         this.setState({search: event.target.value})
     }
+
     getLogs() {
         const logs = this.props.logs;
+        
         if(this.props.currentUser) {
             return logs.filter(
                 (log) => {
@@ -71,6 +73,6 @@ export default withTracker(() => {
     return {
         users: Meteor.users.find({}).fetch(),
         currentUser: Meteor.user(),
-        logs: Logs.find({}, {sort: { createdAt: -1}}).fetch()
+        logs: Logs.find({}, {sort: { createdAt: -1 }}).fetch()
     };
 })(LogPage);
