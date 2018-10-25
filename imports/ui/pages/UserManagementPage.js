@@ -5,6 +5,7 @@ import { Counts } from 'meteor/tmeasday:publish-counts';
 import '/imports/ui/css/usermanagement.css';
 
 import NewUserModal from '/imports/ui/modals/NewUserModal.js';
+import EditUserModal from '/imports/ui/modals/EditUserModal.js';
 import UpdatePasswordModal from '/imports/ui/modals/UpdatePasswordModal.js';
 
 import Button from '/imports/rainbow-ui/Button.js';
@@ -20,6 +21,7 @@ export class UserManagementPage extends Component {
         this.handlePageClick = this.handlePageClick.bind(this);
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
         this.handlePasswordButtonClick = this.handlePasswordButtonClick.bind(this);
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
         this.state = {
@@ -32,6 +34,12 @@ export class UserManagementPage extends Component {
                 {
                     id: 'userManagementSetPasswordModal',
                     content: <UpdatePasswordModal cancelButtonClick={this.closeModal} />,
+                    visible: false,
+                    data: {}
+                },
+                {
+                    id: 'userManagementEditUserModal',
+                    content: <EditUserModal cancelButtonClick={this.closeModal} />,
                     visible: false,
                     data: {}
                 }
@@ -81,7 +89,17 @@ export class UserManagementPage extends Component {
             {
                 key: 'actions',
                 content: 'Aktion',
-                col: '2'
+                col: '2',
+                renderer: (item) => {
+                    return (<Button 
+                                className='btn' 
+                                handleClick={this.handleEditButtonClick}
+                                documentId={item.userId}
+                                action='edit'
+                            >
+                                <i className="far fa-edit"></i>
+                            </Button>);
+                }
             },
         ];
     }
@@ -91,13 +109,8 @@ export class UserManagementPage extends Component {
 
         return users.map((user) => {
             user.password = { userId: user._id };
-            return Object.assign({}, user, {
-                actions: <Button 
-                            className='btn' 
-                            handleClick={this.handleEditButtonClick}
-                            action='edit'
-                         ><i className="far fa-edit"></i></Button>
-            })
+            user.actions = { userId: user._id };
+            return user;
         });
     }
 
@@ -145,6 +158,21 @@ export class UserManagementPage extends Component {
         this.setState((state) => {
             return state.modals.map((modal, index) => {
                 if(modal.id === 'userManagementSetPasswordModal') {
+                    modal.visible = true;
+                    modal.data = { userId: documentId };
+                } else {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
+    }
+
+    handleEditButtonClick(documentId, action) {
+        this.setState((state) => {
+            return state.modals.map((modal, index) => {
+                if(modal.id === 'userManagementEditUserModal') {
                     modal.visible = true;
                     modal.data = { userId: documentId };
                 } else {

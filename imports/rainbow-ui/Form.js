@@ -11,7 +11,11 @@ export default class Form extends Component {
         let inputState = {};
 
         props.configuration.inputs.forEach((input) => {
-            inputState[input.name] = input.defaultValue ? input.defaultValue : '';
+            if(props.configuration.data[input.name]) {
+                inputState[input.name] = props.configuration.data[input.name];
+            } else {
+                inputState[input.name] = input.defaultValue ? input.defaultValue : '';
+            }
         });
 
         this.state = inputState;
