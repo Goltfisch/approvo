@@ -7,6 +7,10 @@ class EditUserModal extends Component {
     getFormConfiguration() {
         const props = this.props;
 
+        let { user } = props;
+
+        user.email = user.emails[0] && user.emails[0].address;
+            
         return {
             id: 'update-user-form',
             headline: 'Benutzer bearbeiten',
@@ -15,7 +19,6 @@ class EditUserModal extends Component {
                 { label: 'Name', type: 'text', name: 'name', placeholder: 'Wie heißt der Benutzer?' },
                 { label: 'Benutzername', type: 'text', name: 'username', placeholder: 'Welchen Benutzernamen soll der Benutzer bekommen?' },
                 { label: 'Email', type: 'text', name: 'email', placeholder: 'Welche Email Adresse verwendet der Benutzer?' },
-                { label: 'Password', type: 'password', name: 'password', placeholder: 'Welches initiale Passwort soll der Benutzer verwenden?' },
                 { label: 'Benutzerrolle', type: 'text', name: 'userRole' },
             ],
             buttons: [
@@ -32,20 +35,22 @@ class EditUserModal extends Component {
                     type: 'submit',
                     className: 'primary',
                     onClick: (formData) => {
-                        console.log('edit user save', formData);
-                        // Meteor.call('User.insert', formData, (error, response) => {
-                        //     if(error) {
-                        //         Bert.alert(error.message, 'danger', 'growl-top-right');
-                        //         return;
-                        //     }
+                        
+                        formData._id = user._id;
 
-                        //     Bert.alert('Benutzer wurde erfolgreich erstellt!', 'info', 'growl-top-right');
-                        //     props.cancelButtonClick();
-                        // });
+                        Meteor.call('User.update', formData, (error, response) => {
+                            if(error) {
+                                Bert.alert(error.message, 'danger', 'growl-top-right');
+                                return;
+                            }
+
+                            Bert.alert('Benutzer wurde erfolgreich bearbeitet!', 'info', 'growl-top-right');
+                            props.cancelButtonClick();
+                        });
                     }
                 }
             ],
-            data: props.user
+            data: user
         }
     }
 

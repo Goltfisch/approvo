@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import Button from '/imports/rainbow-ui/Button.js';
+import Input from '/imports/rainbow-ui/Input.js';
+import Select from '/imports/rainbow-ui/Select.js';
 
 import './css/form.css';
 
@@ -29,13 +31,30 @@ export default class Form extends Component {
         const state = this.state;
 
         return configuration.inputs.map((input, index) => {
+            const i = '';
+
+            switch(input.type) {
+                case 'text':
+                case 'password':
+                case 'email':
+                case 'number':
+                    i = <Input 
+                        type={input.type} 
+                        name={input.name} 
+                        placeholder={input.placeholder} 
+                        value={state[input.name]} 
+                        onChange={this.onChangeInput}
+                    />;
+                    break;
+            }
+
             return (
                 <div key={index} className='input-group-wrapper'>
                     <div className='label-wrapper'>
                         <label>{input.label}</label>
                     </div>
                     <div className='input-wrapper'>
-                        <input type={input.type} name={input.name} placeholder={input.placeholder} value={state[input.name]} onChange={this.onChangeInput}/>
+                        {i}
                     </div>
                 </div>
             );
@@ -48,7 +67,7 @@ export default class Form extends Component {
 
         this.setState((state) => {
             state[name] = value;
-            return state
+            return state;
         });
     }
 

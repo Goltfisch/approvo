@@ -18,20 +18,15 @@ Meteor.methods({
     'User.update'(user) {
         const currentUser = Meteor.user();
 
+        console.log('uodate user', user);
+
         if(currentUser && currentUser.userRole && currentUser.userRole == 'admin') {
             Meteor.users.update(user._id, {
                 $set: {
                     username: user.username,
                     name: user.name,
-                    active: user.active,
+                    //active: user.active,
                     userRole: user.userRole,
-                    createMsgState: user.createMsgState,
-                    approveMsgState: user.approveMsgState,
-                    orderMsgState: user.orderMsgState,
-                    completeMsgState: user.completeMsgState,
-                    declineMsgState: user.declineMsgState,
-                    roleMsgState: user.roleMsgState,
-                    lastEditBy: user.lastEditBy
                 }
             });
 
