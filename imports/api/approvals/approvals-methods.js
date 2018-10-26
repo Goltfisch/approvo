@@ -3,20 +3,21 @@ import { Meteor } from 'meteor/meteor';
 import { Approvals } from './approvals.js'
 
 Meteor.methods({
-    'Approvals.insert' (approval, emails) {
+    'Approvals.insert' (approval) {
         if (!this.userId) {
             throw new Meteor.Error('not-authorized', 'You are not authorized!');
         }
 
+        const currentUser = Meteor.user();
+
         approval.state = 'requested';
         approval.deleted = false;
         approval.createdAt = new Date();
-        approval.owner = Meteor.user().name;
+        approval.owner = currentUser.name;
 
-        const currentUser = Meteor.user();
         const approvalInsert = Approvals.insert(approval);
         const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-        const shoppings = Meteor.users.find({ userRole: 'shopping' });
+        const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
 
         let adminIds = [];
         let shoppingIds = [];
@@ -56,14 +57,18 @@ Meteor.methods({
 
         return approvalInsert;
     },
-    'Approvals.approve'(documentId, emails) {
+    'Approvals.approve'(documentId) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized', 'You are not authorized!');
+        }
         
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed');
         } else {
+            approval = Approvals.findOne(documentId);
+
             if(approval && approval.state && approval.state === 'requested') {
                 approval.lastEditByAdmin = currentUser.name;
                 approval.state = 'approve';
@@ -71,7 +76,7 @@ Meteor.methods({
                 Approvals.update(documentId, { $set: approval });
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
                 const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
@@ -115,14 +120,18 @@ Meteor.methods({
             }
         }
     },
-    'Approvals.order'(documentId, emails) {
+    'Approvals.order'(documentId) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized', 'You are not authorized!');
+        }
 
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole == 'user') {
             throw new Meteor.Error('not-allowed');
         }else {
+            approval = Approvals.findOne(documentId);
+
             if(approval && approval.state && approval.state == 'approve') {
                 if(currentUser.userRole == 'admin') {
                     approval.lastEditByAdmin = currentUser.name;
@@ -135,7 +144,7 @@ Meteor.methods({
                 Approvals.update(documentId, { $set: approval });
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
                 const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
@@ -173,17 +182,23 @@ Meteor.methods({
                 }
         
                 Meteor.call('Logs.insert', newLog.action, newLog.type);
+            }else {
+                throw new Meteor.Error('not-possible', 'This action is not possible!');
             }
         }
     },
-    'Approvals.complete'(documentId, emails) {
+    'Approvals.complete'(documentId) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized', 'You are not authorized!');
+        }
 
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole == 'user') {
             throw new Meteor.Error('not-allowed');
         }else {
+            approval = Approvals.findOne(documentId);
+
             if(approval && approval.state && approval.state == 'order') {
                 if(currentUser.userRole == 'admin') {
                     approval.lastEditByAdmin = currentUser.name;
@@ -195,7 +210,7 @@ Meteor.methods({
 
                 Approvals.update(documentId, { $set: approval });
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
                 const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
@@ -233,17 +248,20 @@ Meteor.methods({
                 }
         
                 Meteor.call('Logs.insert', newLog.action, newLog.type);
+            }else {
+                throw new Meteor.Error('not-possible', 'This action is not possible!');
             }
         }
     },
-    'Approvals.decline'(documentId, emails) {
+    'Approvals.decline'(documentId) {
 
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
 
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
+            approval = Approvals.findOne(documentId);
+
             if(approval && approval.state && approval.state == 'requested') {
                 approval.lastEditByAdmin = currentUser.name;
                 approval.state = 'decline';
@@ -251,7 +269,7 @@ Meteor.methods({
                 Approvals.update(documentId, { $set: approval });
                 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-                const shoppings = Meteor.users.find({ userRole: 'shopping' });
+                const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
                 const user = Meteor.users.findOne({ name: approval.owner });
 
                 let adminIds = [];
@@ -290,7 +308,7 @@ Meteor.methods({
         
                 Meteor.call('Logs.insert', newLog.action, newLog.type);
             }else {
-                throw new Meteor.Error('not-possible');
+                throw new Meteor.Error('not-possible', 'This action is not possible!');
             }
         }
     }

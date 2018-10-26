@@ -3,6 +3,10 @@ import { Accounts } from 'meteor/accounts-base';
 
 Meteor.methods({
     'User.insert'(user) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
         const createUser = Accounts.createUser(user);
         const currentUser = Meteor.user();
 
@@ -16,6 +20,10 @@ Meteor.methods({
         return createUser;
     },
     'User.update'(user) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
         const currentUser = Meteor.user();
 
         if(currentUser && currentUser.userRole && currentUser.userRole == 'admin') {
@@ -78,6 +86,10 @@ Meteor.methods({
         }
     },
     'User.delete'(user) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+
         const deleteResult = Meteor.users.remove({ _id: user._id });
 
         const currentUser = Meteor.user();
@@ -92,6 +104,10 @@ Meteor.methods({
         return deleteResult;
     },
     'User.updatePassword'(user) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
+        
         Accounts.setPassword(user._id, user.password);
 
         const currentUser = Meteor.user();

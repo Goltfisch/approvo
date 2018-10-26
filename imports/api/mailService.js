@@ -5,6 +5,9 @@ import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
 
 Meteor.methods({
     'MailService.renderEmail'(data) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
 
         let email = {
             to: '',
@@ -14,10 +17,8 @@ Meteor.methods({
         }
 
         const targetUser = Meteor.users.findOne(data.targetUser);
-
-        let approval = Approvals.findOne(data.approval);
-        
         const user = Meteor.users.findOne(data.user);
+        const approval = Approvals.findOne(data.approval);
         
 
         let templates = [];

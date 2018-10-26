@@ -15,6 +15,10 @@ Meteor.methods({
         return EmailTemplates.insert(emailTemplate);
     },
     'EmailTemplates.update'(emailTemplate) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+        
         return EmailTemplates.update(emailTemplate._id, { $set: emailTemplate });
     }
 });
