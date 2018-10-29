@@ -19,7 +19,11 @@ class EditUserModal extends Component {
                 { label: 'Name', type: 'text', name: 'name', placeholder: 'Wie heißt der Benutzer?' },
                 { label: 'Benutzername', type: 'text', name: 'username', placeholder: 'Welchen Benutzernamen soll der Benutzer bekommen?' },
                 { label: 'Email', type: 'text', name: 'email', placeholder: 'Welche Email Adresse verwendet der Benutzer?' },
-                { label: 'Benutzerrolle', type: 'text', name: 'userRole' },
+                { label: 'Benutzerrolle', type: 'select', name: 'userRole', options: [
+                    { label: 'Benutzer', value: 'user' },
+                    { label: 'Einkauf', value: 'shopping' },
+                    { label: 'Administrator', value: 'admin' },
+                ] },
             ],
             buttons: [
                 {

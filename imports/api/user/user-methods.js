@@ -18,8 +18,6 @@ Meteor.methods({
     'User.update'(user) {
         const currentUser = Meteor.user();
 
-        console.log('uodate user', user);
-
         if(currentUser && currentUser.userRole && currentUser.userRole == 'admin') {
             Meteor.users.update(user._id, {
                 $set: {

@@ -13,7 +13,7 @@ export default class Form extends Component {
         let inputState = {};
 
         props.configuration.inputs.forEach((input) => {
-            if(props.configuration.data[input.name]) {
+            if(props.configuration.data && props.configuration.data[input.name]) {
                 inputState[input.name] = props.configuration.data[input.name];
             } else {
                 inputState[input.name] = input.defaultValue ? input.defaultValue : '';
@@ -31,7 +31,7 @@ export default class Form extends Component {
         const state = this.state;
 
         return configuration.inputs.map((input, index) => {
-            const i = '';
+            let i = '';
 
             switch(input.type) {
                 case 'text':
@@ -43,6 +43,14 @@ export default class Form extends Component {
                         name={input.name} 
                         placeholder={input.placeholder} 
                         value={state[input.name]} 
+                        onChange={this.onChangeInput}
+                    />;
+                    break;
+                case 'select':
+                    i = <Select
+                        name={input.name}
+                        options={input.options}
+                        selectedOption={state[input.name]}
                         onChange={this.onChangeInput}
                     />;
                     break;

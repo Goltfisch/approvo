@@ -87,7 +87,6 @@ export class StatsPage extends Component {
                         userApprovals = Approvals.find({ $and: [ { owner: element.name }, { date: { $lte: this.state.search } } ] }).fetch();
                         approvedUserApprovals = Approvals.find({ $and: [ { state: { $not: 'requested' } }, { state: { $not: 'decline'} }, { owner: element.name }, { date: { $lte: this.state.search } } ] }).fetch();
 
-                        console.log(Approvals.find({date: { $lte: this.state.search } }).fetch());
                     }else {
                         userApprovals = Approvals.find({owner: element.name}).fetch();
                         approvedUserApprovals = Approvals.find({ $and: [ { state: { $not: 'requested' } }, { state: { $not: 'decline'} }, { owner: element.name } ] }).fetch();
