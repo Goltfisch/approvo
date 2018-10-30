@@ -33,6 +33,19 @@
     font-size: 14px;
 }
 
+.form-wrapper .input-group-wrapper .input-wrapper select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    background-color: #fafafa;
+    border: 1px solid #eaeaea;
+    border-radius: 4px;
+    outline: 0;
+    font-size: 14px;
+    height: 38px;
+    text-indent: 7px;
+}
+
 .form-wrapper .form-buttons {
     margin-top: 25px;
     display: flex;
