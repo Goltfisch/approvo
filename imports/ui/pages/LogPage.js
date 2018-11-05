@@ -1,78 +1,105 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Counts } from 'meteor/tmeasday:publish-counts';
+import moment from 'moment';
 
 import { Logs } from '/imports/api/logs/logs.js';
 
-import Log from '/imports/ui/components/Log.js';
+import '/imports/ui/css/logs.css';
+
+import Table from '/imports/rainbow-ui/Table.js';
+import Search from '/imports/rainbow-ui/Search.js';
 
 export class LogPage extends Component {
-    constructor() {
-        super();
-        this.state = {
-            search: ''
-        };
+    constructor(props) {
+        super(props);
+
+        this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+        this.handlePageClick = this.handlePageClick.bind(this);
     }
 
-    updateSearch(event) {
-        this.setState({search: event.target.value})
+    getTableHeader() {
+        return [
+            {
+                key: 'date',
+                content: 'Datum',
+                col: '1'
+            },
+            {
+                key: 'time',
+                content: 'Uhrzeit',
+                col: '1'
+            },
+            {
+                key: 'user',
+                content: 'Benutzer',
+                col: '2'
+            },
+            {
+                key: 'action',
+                content: 'Ereignis',
+                col: '8'
+            }
+        ];
     }
 
-    getLogs() {
-        const logs = this.props.logs;
-        
-        if(this.props.currentUser) {
-            return logs.filter(
-                (log) => {
-                    return log.date.indexOf(this.state.search) !== -1 || log.time.indexOf(this.state.search) !== -1 ||
-                        log.action.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1 || log.user.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
-                }
-            );
-        }
+    getTableContentRows() {
+        return this.props.logs;
+    }
+
+    handleSearchInputChange(searchQuery) {
+        this.props.setSearchQuery(searchQuery);
+    }
+
+    handlePageClick(page) {
+        this.props.setCurrentPage(page);
     }
     
-    renderLogs() {
-        return this.getLogs().map(((log) => (
-            <Log key={log._id} log={log}/>
-        )));
-    }
-
     render() {
-        return (
-            <div className='log-page'>
-                { this.props.currentUser.userRole != 'admin' ?
-                    <p>Du hast nicht die benötigten Rechte um diese Seite aufrufen zu können.</p> :
-                    <div className='visible-access'>
-                        <div className='log-page-search'>
-                            <label><i className="fas fa-search"></i></label>
-                            <input type='text' className="log-search" value={this.state.search} onChange={this.updateSearch.bind(this)}/>
-                        </div>
+        const { logsCount, currentPage } = this.props;
 
-                        <div className="content-log">
-                            <table width="100%" border="1px">
-                                <tbody>
-                                    <tr>
-                                        <th>Datum</th>
-                                        <th>Uhrzeit</th>
-                                        <th>Benutzer</th>
-                                        <th>Ereignis</th>
-                                    </tr>
-                                    {this.renderLogs()}
-                                </tbody>
-                            </table>
+        return (
+            <div className='logs-page'>
+                <div className="content-logs">
+                    <div className='content-logs-actions'>
+                        <div className='content-logs-actions-left'>
+                            <h2>Protokoll</h2>
+                        </div>
+                        <div className='content-logs-actions-right'>
+                            <Search handleSearchInputChange={this.handleSearchInputChange} />
                         </div>
                     </div>
-                }
+                    <Table 
+                        head={this.getTableHeader()}
+                        rows={this.getTableContentRows()}
+                        totalCount={logsCount}
+                        handlePageClick={this.handlePageClick}
+                        currentPage={currentPage}
+                    />
+                </div>
             </div>
         )
     }
 }
 
-export default withTracker(() => {
-    Meteor.subscribe('Usermanagement.users');
-    Meteor.subscribe('Logs');
+export default withTracker((props) => {
+    q = {};
+    p = {};
+
+    if(props.searchQuery) {
+        q = props.searchQuery;
+    }
+
+    if(props.currentPage) {
+        p = props.currentPage;
+    }
+
+    Meteor.subscribe('logs', q, p);
+
+    const logs = Logs.find({}, { sort: { date: 1 }}).fetch();
+
     return {
-        users: Meteor.users.find({}).fetch(),
-        currentUser: Meteor.user(),
-        logs: Logs.find({}, {sort: { createdAt: -1 }}).fetch()
+      logs,
+      logsCount: Counts.get('logsCount')
     };
 })(LogPage);

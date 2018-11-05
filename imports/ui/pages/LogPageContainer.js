@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import DashboardPage from '/imports/ui/pages/DashboardPage.js';
+import LogPage from '/imports/ui/pages/LogPage.js';
 
-export default class DashboardPageContainer extends Component {
+export default class LogPageContainer extends Component {
     constructor(props) {
         super(props);
 
@@ -31,8 +31,8 @@ export default class DashboardPageContainer extends Component {
         const { searchQuery, currentPage } = this.state;
         
         return (
-            <div className='dashboard-page-container'>
-                <DashboardPage 
+            <div className='logs-page-container'>
+                <LogPage 
                     searchQuery={searchQuery}
                     currentPage={currentPage}
                     setSearchQuery={this.setSearchQuery}

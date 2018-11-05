@@ -90,8 +90,6 @@ export class StatisticsPage extends Component {
             
             approvals.forEach(function(approval){
                 let approvalDate = new Date(approval.date);
-                
-                console.log('month', approvalDate.getMonth());
 
                 if(approvalDate.getMonth() === month.number && approval.state === 'complete') {
                     let amount = EURO(approval.amount.replace('.', ','));
