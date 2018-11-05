@@ -156,7 +156,7 @@ Meteor.startup(() => {
                 link: faker.internet.url(),
                 state: 'requested',
                 owner: this.userId,
-                date: moment(new Date()).format('DD.MM.YYYY'),
+                date: faker.date.past(),
                 deleted: false,
                 createdAt: new Date,
             });

@@ -38,6 +38,7 @@ export default class Form extends Component {
                 case 'password':
                 case 'email':
                 case 'number':
+                case 'date':
                     i = <Input 
                         type={input.type} 
                         name={input.name} 

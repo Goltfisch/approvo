@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-
+import moment from 'moment';
 import { Approvals } from './approvals.js';
 
 Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
@@ -20,7 +20,7 @@ Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
     };
 
     let p = {
-        sort: { createdAt: -1 },
+        sort: { date: -1 },
     };
 
     Counts.publish(this, 'dashboardApprovalsCount', Approvals.find(q, p));
@@ -34,4 +34,12 @@ Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
     }
     
     return Approvals.find(q, p);
+});
+
+Meteor.publish('statistics.approvals', function() {
+    if(!this.userId) {
+        throw new Meteor.Error('not authorized', 'You are not authorized!');     
+    }
+
+    return Approvals.find({ }, { sort: { createdAt: -1 }});
 });

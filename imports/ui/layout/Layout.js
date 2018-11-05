@@ -32,7 +32,7 @@ class Layout extends Component {
             },
             {
                 id: 5,
-                to: '/stats',
+                to: '/statistics',
                 name: 'Statistiken',
             }
         ]

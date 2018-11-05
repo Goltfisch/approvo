@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Bert } from 'meteor/themeteorchef:bert';
+import moment from 'moment';
 
 import Form from '/imports/rainbow-ui/Form.js';
 
@@ -16,6 +17,7 @@ class NewApprovalModal extends Component {
                 { label: 'Name', type: 'text', name: 'name', placeholder: 'Was benötigst du?' },
                 { label: 'Betrag', type: 'text', name: 'amount', defaultValue: '0', placeholder: 'Wie hoch ist der Beitrag?' },
                 { label: 'Grund', type: 'text', name: 'reason', placeholder: 'Was ist der Grund für den Kauf?' },
+                { label: 'Datum', type: 'date', name: 'date', placeholder: 'Welcher Tag ist heute?', defaultValue: moment().format('YYYY-MM-DD') },
                 { label: 'Link', type: 'text', name: 'link', defaultValue: 'http://', placeholder: 'Wo kann der Artikel eingesehen werden?' }
             ],
             buttons: [

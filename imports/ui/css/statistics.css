@@ -1,0 +1,27 @@
+.statistics-page-container {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.statistics-page .content-statistics .content-statistics-actions {
+    width: 100%;
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.statistics-page .content-statistics .content-statistics-actions .content-statistics-actions-left {
+    width: 50%;
+    display: flex;
+}
+
+.statistics-page .content-statistics .content-statistics-actions .content-statistics-actions-right {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.statistics-page .content-statistics .content-statistics-actions h2 {
+    display: inline-flex;
+    vertical-align: middle;
+    margin: 0;
+}

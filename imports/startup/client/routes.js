@@ -11,7 +11,7 @@ import DashboardPageContainer from '/imports/ui/pages/DashboardPageContainer.js'
 import SettingsPage from '/imports/ui/pages/SettingsPage.js';
 import UserManagementPageContainer from '/imports/ui/pages/UserManagementPageContainer.js';
 import LogPage from '/imports/ui/pages/LogPage.js';
-import StatsPage from '/imports/ui/pages/StatsPage.js';
+import StatisticsPageContainer from '/imports/ui/pages/StatisticsPageContainer.js';
 
 const browserHistory = createBrowserHistory();
 
@@ -24,7 +24,7 @@ export const renderRoutes = () => (
                 <Route exact path='/settings' component={SettingsPage} />
                 <Route exact path='/usermanagement' component={UserManagementPageContainer} />
                 <Route exact path='/log' component={LogPage} />
-                <Route exact path='/stats' component={StatsPage} />
+                <Route exact path='/statistics' component={StatisticsPageContainer} />
             </Layout>
         </Switch>
     </Router>

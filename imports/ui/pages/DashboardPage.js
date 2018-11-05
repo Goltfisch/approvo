@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import accounting from 'accounting';
 import { Counts } from 'meteor/tmeasday:publish-counts';
+import moment from 'moment';
 
 import { Approvals } from '/imports/api/approvals/approvals.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
@@ -66,7 +67,7 @@ export class DashboardPage extends Component {
             {
                 key: 'reason',
                 content: 'Grund',
-                col: '5'
+                col: '4'
             },
             {
                 key: 'state',
@@ -87,6 +88,14 @@ export class DashboardPage extends Component {
                         default:
                             return <Badge>{item}</Badge>
                     }
+                }
+            },
+            {
+                key: 'date',
+                content: 'Datum',
+                cal: '1',
+                renderer: (item) => {
+                    return moment(item).format('DD.MM.YYYY');
                 }
             },
             {
@@ -134,7 +143,7 @@ export class DashboardPage extends Component {
             {
                 label: 'Ablehnen',
                 key: 'decline',
-                isMain: state == 'decline'
+                isMain: false
             }
         ];
     }
@@ -281,7 +290,7 @@ export default withTracker((props) => {
 
     Meteor.subscribe('dashboard.approvals', q, p);
 
-    const approvals = Approvals.find({ deleted: false }, { sort: { createdAt: -1 }}).fetch();
+    const approvals = Approvals.find({ deleted: false }, { sort: { date: -1 }}).fetch();
 
     return {
       approvals,
