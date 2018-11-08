@@ -5,3 +5,12 @@ body {
 .bold-amount {
     font-weight: bold;
 }
+
+.content-login-message {
+    padding: 50px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    background-color: #111;
+    color: white;
+}

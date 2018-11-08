@@ -49,7 +49,7 @@ class Layout extends Component {
                     { this.props.currentUser ?
                         <div className='container'>
                             {this.props.children}
-                        </div> : 'Bitte einloggen...'
+                        </div> : <div className='content-login-message'>Bitte einloggen...</div>
                     }
                 </div>
                 <Footer />

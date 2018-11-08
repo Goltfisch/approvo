@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Bert } from 'meteor/themeteorchef:bert';
 
+import SwitchButton from '/imports/rainbow-ui/SwitchButton.js';
+
 export class SettingsPage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+    
     getCreateMsgState() {
         if(this.props.currentUser) {
             if(this.props.currentUser.createMsgState == true) {
@@ -201,15 +209,21 @@ export class SettingsPage extends Component {
         }
     }
 
-    handleChange() {
-        return;
+    handleChange(documentId, state) {
+        console.log('switch state', state, documentId);
     }
 
     render() {
+        const { currentUser } = this.props;
+
         return (
             <div className='settings-page'>
                 <h2>Freigaben Benachrichtigungen:</h2>
                 <ul className="accountApprovalSettingsOptions">
+                <li>
+                        <label>Wenn eine Anfrage erfolgrreich erstellt wurde</label>
+                        <SwitchButton handleChange={this.handleChange} documentId={currentUser._id} />
+                    </li>
                     <li>
                         <label>Wenn eine Anfrage erfolgrreich erstellt wurde</label>
                         <input type="checkbox" onChange={this.handleChange.bind(this)} onClick={this.setCreateMsgState.bind(this)} checked={this.getCreateMsgState()} className="creationMsgSwitch" />
