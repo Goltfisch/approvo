@@ -63,12 +63,6 @@ Meteor.startup(() => {
             number: '5',
             value: 'decline',
             createdAt: Date.now()
-        },
-        {
-            name: 'Abgeschlossen',
-            number: '6',
-            value: 'completed',
-            createdAt: Date.now()
         }
     ];
 
@@ -147,19 +141,19 @@ Meteor.startup(() => {
         });
     }
     
-    if(Approvals.find().count() < 1) {
-        for(let i = 0; i < 100; i++) {
-            Approvals.insert({
-                name: faker.commerce.productName(),
-                amount: faker.finance.amount(),
-                reason: faker.lorem.sentence(),
-                link: faker.internet.url(),
-                state: 'requested',
-                owner: this.userId,
-                date: faker.date.past(),
-                deleted: false,
-                createdAt: new Date,
-            });
-        }
-    }
+    // if(Approvals.find().count() < 1 && Meteor.isDevelopment()) {
+    //     for(let i = 0; i < 100; i++) {
+    //         Approvals.insert({
+    //             name: faker.commerce.productName(),
+    //             amount: faker.finance.amount(),
+    //             reason: faker.lorem.sentence(),
+    //             link: faker.internet.url(),
+    //             state: 'requested',
+    //             owner: this.userId,
+    //             date: faker.date.past(),
+    //             deleted: false,
+    //             createdAt: new Date,
+    //         });
+    //     }
+    // }
 });

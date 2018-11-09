@@ -290,7 +290,7 @@ export default withTracker((props) => {
 
     Meteor.subscribe('dashboard.approvals', q, p);
 
-    const approvals = Approvals.find({ deleted: false }, { sort: { date: -1 }}).fetch();
+    const approvals = Approvals.find({}, { sort: { date: -1 }}).fetch();
 
     return {
       approvals,

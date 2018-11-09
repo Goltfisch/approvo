@@ -15,21 +15,22 @@ export default class SwitchButton extends Component {
         }
     }
 
-    handleChange(event) {
-        const { handleChange, documentId } = this.props;
+    handleChange() {
+        const { handleChange, documentId, name } = this.props;
 
         this.setState((state) => {
-            handleChange(documentId, !state.isChecked);
+            handleChange(documentId, !state.isChecked, name);
             return state.isChecked =  !state.isChecked;
         });
     }
 
     render() {
         const { isChecked } = this.state;
+        const { name } = this.props;
 
         return (
             <label className="switch">
-                <input type="checkbox" checked={isChecked} onChange={this.handleChange}/>
+                <input type="checkbox" checked={isChecked} name={name} onChange={this.handleChange}/>
                 <span className="slider round"></span>
             </label>
         );

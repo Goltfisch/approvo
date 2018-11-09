@@ -9,9 +9,10 @@ Meteor.methods({
         }
 
         approval.state = 'requested';
-        approval.deleted = false;
         approval.createdAt = new Date();
-        approval.owner = Meteor.user().name;
+        approval.owner = this.userId;
+
+        //Approvals.schema.validate(approval);
 
         const currentUser = Meteor.user();
         const approvalInsert = Approvals.insert(approval);

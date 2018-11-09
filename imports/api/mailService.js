@@ -19,7 +19,6 @@ Meteor.methods({
         
         const user = Meteor.users.findOne(data.user);
         
-
         let templates = [];
         let admins = [];
         let shoppings = [];

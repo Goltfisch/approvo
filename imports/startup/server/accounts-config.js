@@ -4,12 +4,14 @@ Accounts.onCreateUser((options, user) => {
     const customizedUser = Object.assign({
     userRole: options.userRole,
     name: options.name,
-    createMsgState: true,
-    approveMsgState: true,
-    orderMsgState: true,
-    completeMsgState: true,
-    declineMsgState: true,
-    roleMsgState: true
+    notifications: [
+      'onCreatedRequest', 
+      'onApprovedRequest',
+      'onPurchasedApproval',
+      'onDeclinedRequest',
+      'onCompletedOrder',
+      'onChangedUserRole'
+  ]
   }, user);
 
   if (options.profile) {

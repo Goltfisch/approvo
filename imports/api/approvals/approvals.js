@@ -1,39 +1,35 @@
 import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
  
 export const Approvals = new Mongo.Collection('Dashboard.approvals');
 
 Approvals.schema = new SimpleSchema( {
-    _id: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-    },
     name: {
         type: String,
+        required: true
     },
     amount: {
-        type: Number,
+        type: String,
+        required: true
     },
     reason: {
         type: String,
+        required: true
     },
     link: {
         type: String,
+        required: true
+    },
+    date: {
+        type: String,
+        required: true
     },
     state: {
         type: String,
+        required: true
     },
     owner: {
         type: String
-    },
-    lastEditByAdmin: {
-        type: String,
-    },
-    lastEditByShopping: {
-        type: String,
-    },
-    deleted: {
-        type: Boolean,
     },
     createdAt: {
         type: Date,
@@ -49,6 +45,5 @@ Approvals.publicFields = {
     owner: 1,
     lastEditByAdmin: 1,
     lastEditByShopping: 1,
-    deleted: 1,
     createdAt: 1
 };

@@ -3,6 +3,14 @@ import { Accounts } from 'meteor/accounts-base';
 
 Meteor.methods({
     'User.insert'(user) {
+        user.notifications = [
+            'onCreatedRequest', 
+            'onApprovedRequest',
+            'onPurchasedApproval',
+            'onCompletedOrder',
+            'onChangedUserRole'
+        ];
+
         const createUser = Accounts.createUser(user);
         const currentUser = Meteor.user();
 
@@ -95,5 +103,12 @@ Meteor.methods({
         }
 
         Meteor.call('Logs.insert', newLog.action, newLog.type);
+    },
+    'User.updateSettings'(user) {
+        Meteor.users.update(user._id, {
+            $set: {
+                ...user
+            }
+        });
     }
 });
