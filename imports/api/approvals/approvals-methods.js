@@ -46,6 +46,10 @@ Meteor.methods({
             if(error) {
                 console.log('Fehler: ', error);
             }
+
+            result.forEach(element => {
+                Meteor.call('MailService.sendEmail', element);
+            })
         });
 
         const newLog = {
@@ -106,6 +110,10 @@ Meteor.methods({
                     if(error) {
                         console.log('Fehler: ', error);
                     }
+
+                    result.forEach(element => {
+                        Meteor.call('MailService.sendEmail', element);
+                    })
                 });
 
                 const newLog = {
@@ -174,6 +182,10 @@ Meteor.methods({
                     if(error) {
                         console.log('Fehler: ', error);
                     }
+
+                    result.forEach(element => {
+                        Meteor.call('MailService.sendEmail', element);
+                    })
                 });
 
                 const newLog = {
@@ -240,6 +252,10 @@ Meteor.methods({
                     if(error) {
                         console.log('Fehler: ', error);
                     }
+
+                    result.forEach(element => {
+                        Meteor.call('MailService.sendEmail', element);
+                    })
                 });
 
                 const newLog = {
@@ -299,6 +315,10 @@ Meteor.methods({
                     if(error) {
                         console.log('Fehler: ', error);
                     }
+
+                    result.forEach(element => {
+                        Meteor.call('MailService.sendEmail', element);
+                    })
                 });
 
                 const newLog = {

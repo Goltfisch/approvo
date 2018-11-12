@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email'
 
 import { Approvals } from '/imports/api/approvals/approvals.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
@@ -9,21 +10,15 @@ Meteor.methods({
             throw new Meteor.Error('not authorized');
         }
 
-        let email = {
-            to: '',
-            from: 'noreply@Approvo',
-            subject: '[Approvo] ',
-            text: ''
-        }
-
         const targetUser = Meteor.users.findOne(data.targetUser);
         const user = Meteor.users.findOne(data.user);
         const approval = Approvals.findOne(data.approval);
         
-
         let templates = [];
         let admins = [];
         let shoppings = [];
+        let addresses = [];
+        let mails = [];
 
         if(data.admins) {
             data.admins.forEach(element => {
@@ -42,6 +37,13 @@ Meteor.methods({
         });
 
         templates.forEach(element => {
+            let email = {
+                to: '',
+                from: 'noreply@Approvo',
+                subject: '[Approvo] ',
+                text: ''
+            }
+            
             switch(element.templateName) {
                 case 'adminCreateMail' :
                     for(let i=0; i<admins.length; i++) {
@@ -57,7 +59,7 @@ Meteor.methods({
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
+                        mails.push(email);
                     }
 
                     break;
@@ -74,7 +76,8 @@ Meteor.methods({
                     email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
                     email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                    mails.push(email);
+
                     break;
                 case 'adminCompleteMail' :
                     text = element.templateContent;
@@ -89,10 +92,13 @@ Meteor.methods({
                     email.subject = '[Approvo] Freigabe "' + approval.name + '" abgeschlossen!'
                     email.text = text;
 
-                    Meteor.call('MailService.sendEmail', email);
+                    mails.push(email);
+
                     break;
                 case 'shoppingApproveMail' :
+                    let emails = [];
                     for(let i=0; i<shoppings.length; i++) {
+                        console.log('shopping: ', shoppings[i]);
                         text = element.templateContent;
 
                         text = text.replace('"Shopping"', shoppings[i].name);
@@ -106,7 +112,10 @@ Meteor.methods({
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" freigegeben!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
+                        console.log('email', email);
+                        emails[i] = (email);
+
+                        console.log('emails', emails);
                     }
 
                     break;
@@ -121,12 +130,10 @@ Meteor.methods({
                         email.to = user.emails[0].address;
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!'
                         email.text = text;
-
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
                     }
                     
+                    mails.push(email);
+
                     break;
                 case 'userApproveMail' :
                     text = element.templateContent;
@@ -141,9 +148,7 @@ Meteor.methods({
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" freigegeben!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
+                        mails.push(email);
                     }
 
                     break;
@@ -160,9 +165,7 @@ Meteor.methods({
                         email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
+                        mails.push(email);
                     }
 
                     break;
@@ -180,9 +183,7 @@ Meteor.methods({
                         email.subject = '[Approvo] Freigabe "' + approval.name + '" abgeschlossen!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
+                        mails.push(email);
                     }
 
                     break;
@@ -199,9 +200,7 @@ Meteor.methods({
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" abgelehnt!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
+                        mails.push(email);
                     }
 
                     break;
@@ -219,21 +218,26 @@ Meteor.methods({
                         email.subject = '[Approvo] Rolle wurde zu "' + data.userRole + '" geändert!'
                         email.text = text;
 
-                        Meteor.call('MailService.sendEmail', email);
-                    }else {
-                        return;
+                        mails.push(email);
                     }
 
                     break;
             }
         });
+
+        console.log('mails', mails);
+
+        return mails;
     },
     'MailService.sendEmail'(email) {
+        if(!this.userId) {
+            throw new Meteor.Error('not authorized');
+        }
 
-        const to = email.to;
-        const from = email.from;
-        const subject = email.subject;
-        const text = email.text;
+        let to = email.to;
+        let from = email.from;
+        let subject = email.subject;
+        let text = email.text;
 
         return Email.send({ to, from, subject, text });
     }
