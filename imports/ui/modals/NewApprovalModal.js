@@ -34,6 +34,7 @@ class NewApprovalModal extends Component {
                     type: 'submit',
                     className: 'primary',
                     onClick: (formData) => {
+                        formData.amount = parseInt(formData.amount);
                         Meteor.call('Approvals.insert', formData, (error, response) => {
                             if(error) {
                                 Bert.alert(error.reason, 'danger', 'growl-top-right');

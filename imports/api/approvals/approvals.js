@@ -4,12 +4,17 @@ import SimpleSchema from 'simpl-schema';
 export const Approvals = new Mongo.Collection('Dashboard.approvals');
 
 Approvals.schema = new SimpleSchema( {
+    _id: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        required: false
+    },
     name: {
         type: String,
         required: true
     },
     amount: {
-        type: String,
+        type: Number,
         required: true
     },
     reason: {
@@ -22,17 +27,19 @@ Approvals.schema = new SimpleSchema( {
     },
     date: {
         type: String,
-        required: true
+        required: false
     },
     state: {
         type: String,
-        required: true
+        required: false
     },
     owner: {
-        type: String
+        type: String,
+        required: false
     },
     createdAt: {
         type: Date,
+        required: false
     }
 });
 

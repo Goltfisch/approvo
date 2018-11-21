@@ -12,7 +12,7 @@ Meteor.methods({
         approval.createdAt = new Date();
         approval.owner = this.userId;
 
-        //Approvals.schema.validate(approval);
+        Approvals.schema.validate(approval);
 
         const currentUser = Meteor.user();
         const approvalInsert = Approvals.insert(approval);

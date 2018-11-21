@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
 
 import { ApprovalStates } from './approvalStates.js'
 
@@ -8,6 +7,8 @@ Meteor.methods({
         if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
+
+        ApprovalStates.schema.validate(state);
 
         return ApprovalStates.insert(state);
     }
