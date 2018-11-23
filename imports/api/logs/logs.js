@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
  
 export const Logs = new Mongo.Collection('Logs');
 
@@ -7,6 +7,7 @@ Logs.schema = new SimpleSchema( {
     _id: {
         type: String,
         regEx: SimpleSchema.RegEx.Id,
+        required: false
     },
     type: {
         type: String,

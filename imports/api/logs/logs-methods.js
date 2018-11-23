@@ -14,6 +14,8 @@ Meteor.methods({
             createdAt: new Date()
         }
 
+        Logs.schema.validate(log);
+
         return Logs.insert(log);
     }
 });

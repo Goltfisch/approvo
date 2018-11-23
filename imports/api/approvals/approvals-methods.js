@@ -57,23 +57,23 @@ Meteor.methods({
 
         return approvalInsert;
     },
-    'Approvals.approve'(documentId, emails) {
-        
+    'Approvals.approve'(documentId) {
+        const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
+
+        Approvals.schema.validate(approval);
 
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed');
         } else {
             if(approval && approval.state && approval.state === 'requested') {
-                approval.lastEditByAdmin = currentUser.name;
                 approval.state = 'approve';
 
                 Approvals.update(documentId, { $set: approval });
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
-                const user = Meteor.users.findOne({ name: approval.owner });
+                const user = Meteor.users.findOne(approval.owner);
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -116,28 +116,23 @@ Meteor.methods({
             }
         }
     },
-    'Approvals.order'(documentId, emails) {
-
+    'Approvals.order'(documentId) {
+        const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
+
+        Approvals.schema.validate(approval);
 
         if(currentUser.userRole == 'user') {
             throw new Meteor.Error('not-allowed');
         }else {
             if(approval && approval.state && approval.state == 'approve') {
-                if(currentUser.userRole == 'admin') {
-                    approval.lastEditByAdmin = currentUser.name;
-                }else if(currentUser.userRole == 'shopping') {
-                    approval.lastEditByShopping = currentUser.name;
-                }
-
                 approval.state = 'order';
 
                 Approvals.update(documentId, { $set: approval });
 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
-                const user = Meteor.users.findOne({ name: approval.owner });
+                const user = Meteor.users.findOne(approval.owner);
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -177,27 +172,23 @@ Meteor.methods({
             }
         }
     },
-    'Approvals.complete'(documentId, emails) {
-
+    'Approvals.complete'(documentId) {
+        const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
+
+        Approvals.schema.validate(approval);
 
         if(currentUser.userRole == 'user') {
             throw new Meteor.Error('not-allowed');
         }else {
             if(approval && approval.state && approval.state == 'order') {
-                if(currentUser.userRole == 'admin') {
-                    approval.lastEditByAdmin = currentUser.name;
-                }else if(currentUser.userRole == 'shopping') {
-                    approval.lastEditByShopping = currentUser.name;
-                }
 
                 approval.state = 'complete';
 
                 Approvals.update(documentId, { $set: approval });
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
-                const user = Meteor.users.findOne({ name: approval.owner });
+                const user = Meteor.users.findOne(approval.owner);
 
                 let adminIds = [];
                 let shoppingIds = [];
@@ -237,23 +228,23 @@ Meteor.methods({
             }
         }
     },
-    'Approvals.decline'(documentId, emails) {
-
+    'Approvals.decline'(documentId) {
+        const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();
-        approval = Approvals.findOne(documentId);
+
+        Approvals.schema.validate(approval);
 
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             if(approval && approval.state && approval.state == 'requested') {
-                approval.lastEditByAdmin = currentUser.name;
                 approval.state = 'decline';
 
                 Approvals.update(documentId, { $set: approval });
                 
                 const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
                 const shoppings = Meteor.users.find({ userRole: 'shopping' });
-                const user = Meteor.users.findOne({ name: approval.owner });
+                const user = Meteor.users.findOne(approval.owner);
 
                 let adminIds = [];
                 let shoppingIds = [];

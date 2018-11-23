@@ -8,6 +8,8 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized');
         }
 
+        EmailTemplates.schema.validate(emailTemplate);
+
         if(!emailTemplate.createdAt) {
             emailTemplate.createdAt = moment(new Date()).format('DD.MM.YYYY');
         }
@@ -15,6 +17,12 @@ Meteor.methods({
         return EmailTemplates.insert(emailTemplate);
     },
     'EmailTemplates.update'(emailTemplate) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
+        
+        EmailTemplates.schema.validate(emailTemplate);
+
         return EmailTemplates.update(emailTemplate._id, { $set: emailTemplate });
     }
 });

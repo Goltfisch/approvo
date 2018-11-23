@@ -1,5 +1,5 @@
 import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import SimpleSchema from 'simpl-schema';
  
 export const UserRoles = new Mongo.Collection('User.roles');
 
@@ -7,6 +7,7 @@ UserRoles.schema = new SimpleSchema( {
     _id: {
         type: String,
         regEx: SimpleSchema.RegEx.Id,
+        required: false
     },
     name: {
         type: String,
@@ -19,6 +20,7 @@ UserRoles.schema = new SimpleSchema( {
     },
     createdAt: {
         type: Date,
+        required: false
     }
 });
 
