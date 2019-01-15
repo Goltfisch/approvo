@@ -107,7 +107,7 @@ export class DashboardPage extends Component {
     }
 
     getTableContentRows() {
-        let approvals = this.props.approvals;
+        let { approvals, currentUser } = this.props;
 
         return approvals.map((approval) => {
             if(approval.link) {
@@ -116,9 +116,15 @@ export class DashboardPage extends Component {
                 approval.linkedName = approval.name;
             }
 
-            return Object.assign({}, approval, {  
-                actions: <SplitButton documentId={approval._id} handleClick={this.handleStateButtonClick} actions={this.getStateActions(approval.state)} />
-            });
+            let splitButtonActions = {};
+
+            if(currentUser.userRole == 'admin' || currentUser.userRole == 'shopping') {
+                splitButtonActions = {
+                    actions: <SplitButton documentId={approval._id} handleClick={this.handleStateButtonClick} actions={this.getStateActions(approval.state)} />
+                }
+            }
+
+            return Object.assign({}, approval, splitButtonActions);
         });
     }
 
