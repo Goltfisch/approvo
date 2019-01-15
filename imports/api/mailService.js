@@ -8,7 +8,7 @@ Meteor.methods({
 
         let email = {
             to: '',
-            from: 'noreply@Approvo',
+            from: 'noreply@approvo.de',
             subject: '[Approvo] ',
             text: ''
         }
@@ -47,7 +47,7 @@ Meteor.methods({
 
                         text = text.replace('"Admin"', admins[i].name);
                         text = text.replace('##', '\n\n');
-                        text = text.replace('"User"', approval.owner);
+                        text = text.replace('"User"', user.name);
                         text = text.replace('Approval.Name', approval.name);
                         text = text.replace('##', '\n');
 
@@ -66,7 +66,7 @@ Meteor.methods({
                     text = text.replace('##', '\n\n');
                     text = text.replace('"Einkauf"', approval.lastEditByShopping);
                     text = text.replace('Approval.Name', approval.name);
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
 
                     email.to = Meteor.users.findOne({ name: approval.lastEditByAdmin }).emails[0].address;
                     email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
@@ -80,7 +80,7 @@ Meteor.methods({
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('"Einkauf"', approval.lastEditByShopping);
 
                     email.to = Meteor.users.findOne({ name: approval.lastEditByAdmin }).emails[0].address;
@@ -97,7 +97,7 @@ Meteor.methods({
                         text = text.replace('##', '\n\n');
                         text = text.replace('"Admin"', approval.lastEditByAdmin);
                         text = text.replace('Approval.Name', approval.name);
-                        text = text.replace('"User"', approval.owner);
+                        text = text.replace('"User"', user.name);
                         text = text.replace('##', '\n');
 
                         email.to = shoppings[i].emails[0].address;
@@ -111,7 +111,7 @@ Meteor.methods({
                 case 'userCreateMail' :
                     text = element.templateContent;
 
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
 
@@ -129,7 +129,7 @@ Meteor.methods({
                 case 'userApproveMail' :
                     text = element.templateContent;
 
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('Approval.Name', approval.name);
@@ -148,7 +148,7 @@ Meteor.methods({
                 case 'userOrderMail' :
                     text = element.templateContent;
 
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Shopping"', approval.lastEditByShopping);
@@ -167,7 +167,7 @@ Meteor.methods({
                 case 'userCompleteMail' :
                     text = element.templateContent;
 
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('##', '\n');
@@ -187,7 +187,7 @@ Meteor.methods({
                 case 'userDeclineMail' :
                     text = element.templateContent;
 
-                    text = text.replace('"User"', approval.owner);
+                    text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
