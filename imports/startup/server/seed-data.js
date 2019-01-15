@@ -6,6 +6,18 @@ import { Approvals } from '/imports/api/approvals/approvals.js';
 
 Meteor.startup(() => {
 
+    if(Meteor.users.find({ username: 'alexander.wolf' }).count() < 1) {
+        let user = {
+            name: 'Alexander Wolf',
+            username: 'alexander.wolf',
+            email: 'alexander.wolf@goltfisch.de',
+            password: Meteor.settings.initialAdminUserPassword,
+            userRole: 'admin'
+        };
+
+        Meteor.call('User.insert', user);
+    }
+
     const userRoles = [
         {
             name: 'Administrator',
