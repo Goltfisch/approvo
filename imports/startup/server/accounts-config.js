@@ -22,5 +22,5 @@ Accounts.onCreateUser((options, user) => {
 });
 
 Accounts.config({
-  //forbidClientAccountCreation : true
+  forbidClientAccountCreation : true
 })
