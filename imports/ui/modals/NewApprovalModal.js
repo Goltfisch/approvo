@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Bert } from 'meteor/themeteorchef:bert';
 import moment from 'moment';
+import accounting from 'accounting';
 
 import Form from '/imports/rainbow-ui/Form.js';
 
@@ -34,7 +35,7 @@ class NewApprovalModal extends Component {
                     type: 'submit',
                     className: 'primary',
                     onClick: (formData) => {
-                        formData.amount = parseInt(formData.amount);
+                        formData.amount = accounting.unformat(formData.amount, ',');
                         Meteor.call('Approvals.insert', formData, (error, response) => {
                             if(error) {
                                 Bert.alert(error.reason, 'danger', 'growl-top-right');
