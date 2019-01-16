@@ -10,40 +10,42 @@ import '/imports/ui/css/layout.css';
 class Layout extends Component {
     getListItems() {
         const { currentUser } = this.props;
+        let navigationListItems = [];
 
-        let navigationListItems = [
-            {
+        if(currentUser) {
+            navigationListItems.push({
                 id: 1,
                 to: '/',
                 name: 'Dashboard',
-            },
-            {
+            });
+            
+            navigationListItems.push({
                 id: 2,
                 to: '/settings',
                 name: 'Einstellungen',
-            },
-        ];
+            });
 
-        const isAdmin = currentUser && currentUser.userRole == 'admin';
+            if(currentUser.userRole == 'admin') {
+                navigationListItems.push({
+                    id: 3,
+                    to: '/usermanagement',
+                    name: 'Benuterverwaltung',
+                });
+                
+                navigationListItems.push({
+                    id: 4,
+                    to: '/log',
+                    name: 'Log',
+                });
 
-        if(isAdmin) {
-            navigationListItems.push({
-                id: 3,
-                to: '/usermanagement',
-                name: 'Benuterverwaltung',
-            });
-            navigationListItems.push({
-                id: 4,
-                to: '/log',
-                name: 'Log',
-            });
-            navigationListItems.push({
-                id: 5,
-                to: '/statistics',
-                name: 'Statistiken',
-            });
+                navigationListItems.push({
+                    id: 5,
+                    to: '/statistics',
+                    name: 'Statistiken',
+                });
+            }
         }
-
+    
         return navigationListItems;
     }
     

@@ -11,8 +11,15 @@ export default class LogPageContainer extends Component {
 
         this.state = {
             searchQuery: '',
-            currentPage: props.match.params.page ? props.match.params.page : 1,
-        };
+            currentPage: 1,
+        }
+
+        if(props && props.match && props.match.params && props.match.params.page) {
+            this.state = {
+                searchQuery: '',
+                currentPage: props.match.params.page,
+            };
+        }
     }
 
     setSearchQuery(query) {

@@ -17,10 +17,7 @@ import StatisticsPageContainer from '/imports/ui/pages/StatisticsPageContainer.j
 
 const browserHistory = createBrowserHistory();
 
-const user = Meteor.user();
-const isAdmin = user && user.userRole == 'admin';
-
-export const renderRoutes = () => (
+export const renderRoutes = (isAdmin) => (
     <Router history={browserHistory}>
         <Switch>
             <Layout>
