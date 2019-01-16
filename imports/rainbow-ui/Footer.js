@@ -10,7 +10,7 @@ export default class Footer extends Component {
                     &copy; 2018 Goltfisch GmbH
                 </div>
                 <div className='version-block'>
-                    Approvo version 1.0.0
+                    Approvo version 1.0.1
                 </div>
                 <div className='message-block'>
                     Made with <i className="fas fa-heart"></i> in Paderborn

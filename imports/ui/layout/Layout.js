@@ -9,7 +9,9 @@ import '/imports/ui/css/layout.css';
 
 class Layout extends Component {
     getListItems() {
-        return [
+        const { currentUser } = this.props;
+
+        let navigationListItems = [
             {
                 id: 1,
                 to: '/',
@@ -20,22 +22,29 @@ class Layout extends Component {
                 to: '/settings',
                 name: 'Einstellungen',
             },
-            {
+        ];
+
+        const isAdmin = currentUser && currentUser.userRole == 'admin';
+
+        if(isAdmin) {
+            navigationListItems.push({
                 id: 3,
                 to: '/usermanagement',
                 name: 'Benuterverwaltung',
-            },
-            {
+            });
+            navigationListItems.push({
                 id: 4,
                 to: '/log',
                 name: 'Log',
-            },
-            {
+            });
+            navigationListItems.push({
                 id: 5,
                 to: '/statistics',
                 name: 'Statistiken',
-            }
-        ]
+            });
+        }
+
+        return navigationListItems;
     }
     
     render() {
