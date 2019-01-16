@@ -37,7 +37,7 @@ export class DashboardPage extends Component {
             ]
         }
     }
-
+ 
     getTableHeader() {
         return [
             {
