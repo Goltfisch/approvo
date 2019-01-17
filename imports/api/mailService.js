@@ -203,6 +203,26 @@ Meteor.methods({
                     }
 
                     break;
+                case 'userDeclineMail' :
+                    text = element.templateContent;
+
+                    text = text.replace('"User"', user.name);
+                    text = text.replace('##', '\n\n');
+                    text = text.replace('Approval.Name', approval.name);
+                    text = text.replace('"Admin"', approval.lastEditByAdmin);
+                    text = text.replace('##', '\n');
+
+                    if(user.declineMsgState) {
+                        email.to = user.emails[0].address;
+                        email.subject = '[Approvo] Anfrage "' + approval.name + '" abgelehnt!'
+                        email.text = text;
+
+                        Meteor.call('MailService.sendEmail', email);
+                    }else {
+                        return;
+                    }
+
+                    break;
                 case 'userRoleMail' :
                     text = element.templateContent;
 
