@@ -9,6 +9,7 @@ Accounts.onCreateUser((options, user) => {
       'onApprovedRequest',
       'onPurchasedApproval',
       'onDeclinedRequest',
+      'onShelvedRequest',
       'onCompletedOrder',
       'onChangedUserRole'
   ]
