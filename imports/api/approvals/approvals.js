@@ -23,7 +23,7 @@ Approvals.schema = new SimpleSchema( {
     state: {
         type: String,
     },
-    owner: {
+    ownerId: {
         type: String
     },
     lastEditByAdmin: {
@@ -46,7 +46,7 @@ Approvals.publicFields = {
     reason: 1,
     link: 1,
     state: 1,
-    owner: 1,
+    ownerId: 1,
     lastEditByAdmin: 1,
     lastEditByShopping: 1,
     deleted: 1,

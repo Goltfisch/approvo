@@ -66,7 +66,7 @@ Meteor.methods({
             throw new Meteor.Error('not-authorized', 'You are not authorized!');
         }
         
-        const currentUser = Meteor.user();
+        const currentUser = Meteor.user();     
 
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed');
@@ -79,41 +79,30 @@ Meteor.methods({
 
                 Approvals.update(documentId, { $set: approval });
 
-                const admins = Meteor.users.find({ userRole: 'admin' }).fetch();
-                const shoppings = Meteor.users.find({ userRole: 'shopping' }).fetch();
-                const user = Meteor.users.findOne({ name: approval.owner });
-
-                let adminIds = [];
-                let shoppingIds = [];
-
-                if(admins) {
-                    admins.forEach(element => {
-                        adminIds.push(element._id);
-                    });
-                }
-
-                if(shoppings) {
-                    shoppings.forEach(element => {
-                        shoppingIds.push(element._id);
-                    });
-                }
-
-                emailTo = {
-                    approval: approval._id,
-                    admins: adminIds,
-                    shoppings: shoppingIds,
-                    user: user._id,
-                    templateNames: [ 'userApproveMail', 'shoppingApproveMail']
-                }
-
-                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                Meteor.call('MailService.renderEmail.shoppingApproveMail', approval._id, (error, result) => {
                     if(error) {
                         console.log('Fehler: ', error);
                     }
 
                     result.forEach(element => {
-                        Meteor.call('MailService.sendEmail', element);
-                    })
+                        Meteor.call('MailService.sendEmail', element, (error, result) => {
+                            if(error) {
+                                console.log(error);
+                            }
+                        });
+                    });
+                });
+
+                Meteor.call('MailService.renderEmail.userApproveMail', approval._id, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
+                    }
+
+                    Meteor.call('MailService.sendEmail', result, (error, result) => {
+                        if(error) {
+                            console.log(error);
+                        }
+                    });
                 });
 
                 const newLog = {

@@ -155,7 +155,7 @@ Meteor.startup(() => {
                 reason: faker.lorem.sentence(),
                 link: faker.internet.url(),
                 state: 'requested',
-                owner: 'Michael2',
+                ownerId: '7S7sxbTcM3N7jngD8',
                 date: moment(new Date()).format('DD.MM.YYYY'),
                 deleted: false,
                 createdAt: new Date,
