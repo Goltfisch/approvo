@@ -285,5 +285,44 @@ Meteor.methods({
                 throw new Meteor.Error('not-possible');
             }
         }
+    },
+    'Approvals.reset'(documentId) {
+        const approval = Approvals.findOne(documentId);
+        const currentUser = Meteor.user();
+
+        Approvals.schema.validate(approval);
+
+        if(currentUser.userRole != 'admin') {
+            throw new Meteor.Error('not-allowed', 'You are not allowed!');
+        }else {
+            if(approval && approval.state && approval.state == 'requested') {
+                approval.state = 'reset';
+
+                Approvals.update(documentId, { $set: approval });
+                
+                const user = Meteor.users.findOne(approval.owner);
+
+                emailTo = {
+                    approval: approval._id,
+                    user: user._id,
+                    templateNames: [ 'userResetMail']
+                }
+
+                Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
+                    if(error) {
+                        console.log('Fehler: ', error);
+                    }
+                });
+
+                const newLog = {
+                    action: currentUser.userRole + ' ' + currentUser.name + ' hat die Anfrage ' + approval.name + ' zurückgestellt.',
+                    type: 'info'
+                }
+        
+                Meteor.call('Logs.insert', newLog.action, newLog.type);
+            }else {
+                throw new Meteor.Error('not-possible');
+            }
+        }
     }
 });
