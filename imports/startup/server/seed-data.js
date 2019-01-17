@@ -1,4 +1,6 @@
 import faker from 'faker';
+import { Accounts } from "meteor/accounts-base";
+
 import { UserRoles } from '/imports/api/user/userRoles/userRoles.js';
 import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
 import { ApprovalStates } from '/imports/api/approvals/approvalStates/approvalStates.js';
@@ -12,10 +14,17 @@ Meteor.startup(() => {
             username: 'alexander.wolf',
             email: 'alexander.wolf@goltfisch.de',
             password: Meteor.settings.initialAdminUserPassword,
-            userRole: 'admin'
+            userRole: 'admin',
+            notifications: [
+                "onCreatedRequest",
+                "onApprovedRequest",
+                "onPurchasedApproval",
+                "onCompletedOrder",
+                "onChangedUserRole"
+            ]
         };
 
-        Meteor.call('User.insert', user);
+        Accounts.createUser(user);
     }
 
     const userRoles = [
