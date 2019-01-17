@@ -203,7 +203,7 @@ Meteor.methods({
                     }
 
                     break;
-                case 'userDeclineMail' :
+                case 'userShelvedMail' :
                     text = element.templateContent;
 
                     text = text.replace('"User"', user.name);
