@@ -24,6 +24,77 @@
     color: #fff;
 }
 
+.btn.success-btn {
+    color: #28a745;
+}
+
+.btn.success-btn:hover {
+    color: #19672b;
+    background-color: transparent;
+    font-size: 15px;
+}
+
+.btn.danger-btn {
+    color: #721c24;
+}
+
+.btn.danger-btn:hover {
+    color: #400f14;
+    background-color: transparent;
+    font-size: 15px;
+}
+
+.btn.warning-btn {
+    color: #bb7a02;
+}
+
+.btn.warning-btn:hover {
+    color: #9c6500;
+    background-color: transparent;
+    font-size: 15px;
+}
+
+.btn.black-btn {
+    color: black;
+}
+
+.btn.black-btn:hover {
+    background-color: transparent;
+}
+
 .btn.primary-btn:hover {
     background-color: #004367;
+    font-size: 15px;
+}
+
+.btn.icon-btn {
+    height: 30px;
+    width: 30px;
+    margin-left: 5px;
+}
+
+.btn.icon-btn.primary-btn {
+    color: #006CA7;
+    background-color: transparent;
+}
+
+.btn.icon-btn.primary-btn:hover {
+    font-size: 15px;
+    background-color: transparent;
+}
+
+.btn.icon-btn.black-btn {
+    color: black;
+}
+
+.btn.icon-btn.black-btn:hover {
+    font-size: 15px;
+}
+
+.btn.icon-btn:first-child {
+    margin-left: 0;
+}
+
+.icon-btn-wrapper {
+    display: flex;
 }
