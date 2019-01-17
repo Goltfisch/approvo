@@ -90,6 +90,8 @@ export class DashboardPage extends Component {
                            return <Badge type='alternative'>Abgeschlossen</Badge>
                         case 'decline':
                            return <Badge type='danger'>Abgelehnt</Badge>
+                        case 'reset':
+                           return <Badge type='warning'>Zurückgestellt</Badge>
                         default:
                             return <Badge>{item}</Badge>
                     }
@@ -155,6 +157,11 @@ export class DashboardPage extends Component {
                 label: 'Ablehnen',
                 key: 'decline',
                 isMain: false
+            },
+            {
+                label: 'Zurückstellen',
+                key: 'reset',
+                isMain: false
             }
         ];
     }
@@ -206,6 +213,17 @@ export class DashboardPage extends Component {
                     }
                     
                     Bert.alert('Anfrage wurde abgelehnt!', 'success', 'growl-top-right');
+                });
+
+                break;
+            case 'reset':
+                Meteor.call('Approvals.reset', documentId, emails, (error, result) => {
+                    if(error) {
+                        Bert.alert(error.reason, 'danger', 'growl-top-right');
+                        return;
+                    }
+                    
+                    Bert.alert('Anfrage wurde zurückgestellt!', 'success', 'growl-top-right');
                 });
 
                 break;
