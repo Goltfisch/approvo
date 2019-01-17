@@ -14,6 +14,8 @@ Meteor.methods({
                 "onCreatedRequest",
                 "onApprovedRequest",
                 "onPurchasedApproval",
+                'onDeclinedRequest',
+                'onShelvedRequest',
                 "onCompletedOrder",
                 "onChangedUserRole"
             ];

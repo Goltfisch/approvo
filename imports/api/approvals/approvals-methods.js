@@ -66,7 +66,7 @@ Meteor.methods({
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed');
         } else {
-            if(approval && approval.state && approval.state === 'requested') {
+            if(approval && approval.state && approval.state === 'requested' || approval.state === 'shelved') {
                 approval.state = 'approve';
 
                 Approvals.update(documentId, { $set: approval });
@@ -237,7 +237,7 @@ Meteor.methods({
         if(currentUser.userRole != 'admin') {
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
-            if(approval && approval.state && approval.state == 'requested') {
+            if(approval && approval.state && approval.state == 'requested' || approval.state === 'shelved') {
                 approval.state = 'decline';
 
                 Approvals.update(documentId, { $set: approval });
@@ -286,7 +286,7 @@ Meteor.methods({
             }
         }
     },
-    'Approvals.reset'(documentId) {
+    'Approvals.shelved'(documentId) {
         const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();
 
@@ -296,7 +296,7 @@ Meteor.methods({
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             if(approval && approval.state && approval.state == 'requested') {
-                approval.state = 'reset';
+                approval.state = 'shelved';
 
                 Approvals.update(documentId, { $set: approval });
                 
@@ -305,7 +305,7 @@ Meteor.methods({
                 emailTo = {
                     approval: approval._id,
                     user: user._id,
-                    templateNames: [ 'userResetMail']
+                    templateNames: [ 'userShelvedMail']
                 }
 
                 Meteor.call('MailService.renderEmail', emailTo, (error, result) => {
