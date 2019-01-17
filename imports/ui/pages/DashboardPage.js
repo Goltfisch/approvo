@@ -41,6 +41,11 @@ export class DashboardPage extends Component {
     getTableHeader() {
         return [
             {
+                key: 'ownerName',
+                content: 'Benutzer',
+                col: '2'
+            },
+            {
                 key: 'linkedName',
                 content: 'Name',
                 col: '2'
@@ -297,6 +302,14 @@ export default withTracker((props) => {
     Meteor.subscribe('dashboard.approvals', q, p);
 
     const approvals = Approvals.find({}, { sort: { date: -1 }}).fetch();
+
+    approvals.forEach(approval => {
+        let owner = Meteor.users.findOne(approval.owner);
+
+        if(owner && owner._id) {
+            approval.ownerName = owner.name
+        }
+    });
 
     return {
       approvals,
