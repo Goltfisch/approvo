@@ -43,7 +43,7 @@ export class DashboardPage extends Component {
             {
                 key: 'ownerName',
                 content: 'Benutzer',
-                col: '2'
+                col: '1'
             },
             {
                 key: 'linkedName',
@@ -90,7 +90,7 @@ export class DashboardPage extends Component {
                            return <Badge type='alternative'>Abgeschlossen</Badge>
                         case 'decline':
                            return <Badge type='danger'>Abgelehnt</Badge>
-                        case 'reset':
+                        case 'shelved':
                            return <Badge type='warning'>Zurückgestellt</Badge>
                         default:
                             return <Badge>{item}</Badge>
@@ -137,33 +137,37 @@ export class DashboardPage extends Component {
 
     getStateActions(state) {
 
-        return [
-            {
-                label: 'Freigeben',
-                key: 'approve',
-                isMain: state == 'requested',
-            },
-            {
-                label: 'Bestellen',
-                key: 'order',
-                isMain: state == 'approve'
-            },
-            {
-                label: 'Abschließen',
-                key: 'complete',
-                isMain: state == 'order'
-            },
-            {
-                label: 'Ablehnen',
-                key: 'decline',
-                isMain: false
-            },
-            {
-                label: 'Zurückstellen',
-                key: 'reset',
-                isMain: false
-            }
-        ];
+        if(state == 'complete' || state == 'decline') {
+            return [];
+        }else {
+            return [
+                {
+                    label: 'Freigeben',
+                    key: 'approve',
+                    isMain: state == 'requested' || 'shelved',
+                },
+                {
+                    label: 'Bestellen',
+                    key: 'order',
+                    isMain: state == 'approve'
+                },
+                {
+                    label: 'Abschließen',
+                    key: 'complete',
+                    isMain: state == 'order'
+                },
+                {
+                    label: 'Ablehnen',
+                    key: 'decline',
+                    isMain: false
+                },
+                {
+                    label: 'Zurückstellen',
+                    key: 'shelved',
+                    isMain: false
+                }
+            ];
+        }
     }
 
     handleStateButtonClick(documentId, action) {
@@ -216,8 +220,8 @@ export class DashboardPage extends Component {
                 });
 
                 break;
-            case 'reset':
-                Meteor.call('Approvals.reset', documentId, emails, (error, result) => {
+            case 'shelved':
+                Meteor.call('Approvals.shelved', documentId, emails, (error, result) => {
                     if(error) {
                         Bert.alert(error.reason, 'danger', 'growl-top-right');
                         return;

@@ -52,6 +52,10 @@ export class SettingsPage extends Component {
                 name: 'onDeclinedRequest'
             },
             {
+                setting: 'Benachrichtigen, wenn eine Anfrage zurückgestellt wurde',
+                name: 'onShelvedRequest'
+            },
+            {
                 setting: 'Benachrichtigen, wenn deine Rolle sich ändert',
                 name: 'onChangedUserRole'
             }
