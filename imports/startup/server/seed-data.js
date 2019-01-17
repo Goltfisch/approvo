@@ -84,6 +84,12 @@ Meteor.startup(() => {
             number: '5',
             value: 'decline',
             createdAt: Date.now()
+        },
+        {
+            name: 'Zurückgestellt',
+            number: '6',
+            value: 'reset',
+            createdAt: Date.now()
         }
     ];
 
@@ -150,6 +156,12 @@ Meteor.startup(() => {
         },
         {
             _id: '10',
+            templateName: 'userResetMail',
+            templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben von "Admin" zurückgestellt.##Sie kann also zu einem späteren Zeitpunkt angenommen bzw. abgelehnt werden.',
+            createdAt: moment(new Date()).format('DD.MM.YYYY')
+        },
+        {
+            _id: '11',
             templateName: 'userRoleMail',
             templateContent: 'Hallo "User", ##du hast soeben die Rolle "Role" von "Admin" zugewiesen bekommen. ##Nutze deine neu gewonnenen Rechte nicht aus!',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
