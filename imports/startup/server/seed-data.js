@@ -19,6 +19,8 @@ Meteor.startup(() => {
                 "onCreatedRequest",
                 "onApprovedRequest",
                 "onPurchasedApproval",
+                "onDeclinedApproval",
+                "onShelvedApproval",
                 "onCompletedOrder",
                 "onChangedUserRole"
             ]
@@ -86,9 +88,9 @@ Meteor.startup(() => {
             createdAt: Date.now()
         },
         {
-            name: 'Zurückgestellt',
+            name: 'Zurückstellen',
             number: '6',
-            value: 'reset',
+            value: 'shelved',
             createdAt: Date.now()
         }
     ];
@@ -156,7 +158,7 @@ Meteor.startup(() => {
         },
         {
             _id: '10',
-            templateName: 'userResetMail',
+            templateName: 'userShelvedMail',
             templateContent: 'Hallo "User", ##deine Anfrage "Approval.Name" wurde soeben von "Admin" zurückgestellt.##Sie kann also zu einem späteren Zeitpunkt angenommen bzw. abgelehnt werden.',
             createdAt: moment(new Date()).format('DD.MM.YYYY')
         },
