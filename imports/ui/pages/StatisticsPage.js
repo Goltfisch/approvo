@@ -92,7 +92,7 @@ export class StatisticsPage extends Component {
                 let approvalDate = new Date(approval.date);
 
                 if(approvalDate.getMonth() === month.number && approval.state === 'complete') {
-                    let amount = EURO(approval.amount.replace('.', ','));
+                    let amount = EURO(approval.amount);
                     statisticsForMonth = statisticsForMonth.add(amount);
                 }
             });
@@ -115,7 +115,7 @@ export class StatisticsPage extends Component {
             let approvalDate = new Date(approval.date);
 
             if(approvalDate.getFullYear() === currentDate.getFullYear() && approval.state === 'complete') {
-                let amount = EURO(approval.amount.replace('.', ','));
+                let amount = EURO(approval.amount);
                 currentYearExpenses = currentYearExpenses.add(amount);
             }
         });
