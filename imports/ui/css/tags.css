@@ -1,0 +1,13 @@
+.table-content-tags {
+    padding-top: 25px;
+    margin-top: 25px;
+    float: left;
+    width: 65%;
+}
+
+.form-content-tags {
+    padding-top: 25px;
+    margin-top: 25px;
+    float: right;
+    width: 30%;
+}
