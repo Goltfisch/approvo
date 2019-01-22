@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import TagsPage from '/imports/ui/pages/TagsPage.js';
 
+import '/imports/ui/css/tags.css';
+
 export default class TagsPageContaier extends Component {
     constructor(props) {
         super(props);
