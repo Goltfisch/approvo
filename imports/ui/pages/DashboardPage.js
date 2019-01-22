@@ -122,9 +122,14 @@ export class DashboardPage extends Component {
         return approvals.map(approval => {
             if (approval.link) {
                 approval.linkedName = (
-                    <a href={approval.link} target="_blank">
-                        {approval.name}
-                    </a>
+                    <div className="icon-btn-wrapper">
+                        <div className="icon-label">
+                            {approval.name}
+                        </div>
+                        <a href={approval.link} target="_blank" className="btn icon-btn primary-btn">
+                            <i className="fas fa-external-link-square-alt"></i>
+                        </a>
+                    </div>
                 );
             } else {
                 approval.linkedName = approval.name;
@@ -214,7 +219,6 @@ export class DashboardPage extends Component {
     }
 
     handleStateButtonClick(documentId, action) {
-        console.log(documentId, action);
         let emails = [];
         switch (action) {
             case "approve":
