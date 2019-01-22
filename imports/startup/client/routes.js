@@ -14,6 +14,7 @@ import SettingsPage from '/imports/ui/pages/SettingsPage.js';
 import UserManagementPageContainer from '/imports/ui/pages/UserManagementPageContainer.js';
 import LogPageContainer from '/imports/ui/pages/LogPageContainer.js';
 import StatisticsPageContainer from '/imports/ui/pages/StatisticsPageContainer.js';
+import TagsPageContainer from '/imports/ui/pages/TagsPageContainer.js';
 
 const browserHistory = createBrowserHistory();
 
@@ -25,6 +26,7 @@ export const renderRoutes = (isAdmin) => (
                 <Route exact path='/approvals/:page' component={DashboardPageContainer} />
                 <Route exact path='/settings' component={SettingsPage} />
                 <Route exact path='/usermanagement' render={() => { return isAdmin ? <UserManagementPageContainer/> : <Redirect to="/"/>}} />
+                <Route exact path='/tags' render={() => { return isAdmin ? <TagsPageContainer/> : <Redirect to="/"/>}} />
                 <Route exact path='/log' render={() => { return isAdmin ? <LogPageContainer/> : <Redirect to="/"/>}} />
                 <Route exact path='/statistics' render={() => { return isAdmin ? <StatisticsPageContainer/> : <Redirect to="/"/>}} />
             </Layout>

@@ -31,15 +31,21 @@ class Layout extends Component {
                     to: '/usermanagement',
                     name: 'Benuterverwaltung',
                 });
-                
+
                 navigationListItems.push({
                     id: 4,
+                    to: '/tags',
+                    name: 'Tags',
+                });
+                
+                navigationListItems.push({
+                    id: 5,
                     to: '/log',
                     name: 'Log',
                 });
 
                 navigationListItems.push({
-                    id: 5,
+                    id: 6,
                     to: '/statistics',
                     name: 'Statistiken',
                 });
