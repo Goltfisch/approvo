@@ -3,8 +3,11 @@ import { withTracker } from 'meteor/react-meteor-data';
 
 import { Tags } from '/imports/api/tags/tags.js';
 
+import EditTagModal from "/imports/ui/modals/EditTagModal.js";
 import Table from '/imports/rainbow-ui/Table.js';
 import Form from '/imports/rainbow-ui/Form.js';
+import Button from "/imports/rainbow-ui/Button.js";
+import Modal from "/imports/rainbow-ui/Modal.js";
 
 import '/imports/ui/css/tags.css';
 
@@ -12,7 +15,23 @@ export class TagsPage extends Component {
     constructor(props) {
         super(props);
 
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
+        this.handleDeleteButtonClick = this.handleDeleteButtonClick.bind(this);
         this.handlePageClick = this.handlePageClick.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
+        this.state = {
+            modals: [
+                {
+                    id: "tagsEditTagModal",
+                    content: (
+                        <EditTagModal cancelButtonClick={this.closeModal} />
+                    ),
+                    visible: false,
+                    data: {}
+                }
+            ]
+        };
     }
 
     getTableHeader() {
@@ -20,16 +39,82 @@ export class TagsPage extends Component {
             {
                 key: 'name',
                 content: 'Tag',
-                col: '3'
-            },
+                col: '6'
+            },{
+                key: "actions",
+                content: "Aktion",
+                col: "1"
+            }
         ];
     }
 
     getTableContentRows() {
         let { tags } = this.props;
 
+        let buttonActions = {};
+
         return tags.map(tag => {
-            return Object.assign({}, tag);
+            buttonActions = this.getTagActions(tag._id);
+
+            return Object.assign({}, tag, buttonActions);
+        });
+    }
+
+    getTagActions(tagId) {
+        return {
+            actions: (
+                <div className="icon-btn-wrapper">
+                    <Button
+                        className="btn icon-btn warning-btn"
+                        documentId={tagId}
+                        action='edit'
+                        handleClick={this.handleEditButtonClick}
+                    >
+                        <i className="fas fa-edit" />
+                    </Button>
+                    <Button
+                        className="btn icon-btn danger-btn"
+                        documentId={tagId}
+                        action='delete'
+                        handleClick={this.handleDeleteButtonClick}
+                    >
+                        <i className="fas fa-trash" />
+                    </Button>
+                </div>
+            )
+        };
+    }
+
+    handleEditButtonClick(documentId) {
+        let tag = Tags.findOne(documentId);
+        console.log('call');
+        if(tag && tag._id) {
+            console.log('tag', tag);
+            this.setState((state) => {
+                return state.modals.map((modal, index) => {
+                    if(modal.id === 'tagsEditTagModal') {
+                        console.log('YAH');
+                        modal.visible = true;
+                        modal.data = { tag: tag };
+                    } else {
+                        modal.visible = false;
+                    }
+    
+                    return modal;
+                });
+            });
+        }else {
+            return false;
+        }
+    }
+
+    handleDeleteButtonClick(documentId) {
+        Meteor.call("Tags.remove", documentId, (error, result) => {
+            if (error) {
+                return Bert.alert(error.reason, "danger", "growl-top-right");
+            }
+
+            Bert.alert("Tag wurde gelöscht!", "info", "growl-top-right");
         });
     }
 
@@ -59,12 +144,51 @@ export class TagsPage extends Component {
                             }
 
                             Bert.alert('Tag wurde erstellt!', 'info', 'growl-top-right');
-                            props.cancelButtonClick();
                         });
                     }
                 }
             ],
         }
+    }
+
+    renderModals() {
+        const { modals } = this.state;
+
+        return modals.map((modal, index) => {
+            if (modal.visible) {
+                return (
+                    <Modal key={index} closeModal={this.closeModal}>
+                        {modal.content}
+                    </Modal>
+                );
+            }
+        });
+    }
+
+    handleEditButtonClick() {
+        this.setState(state => {
+            return state.modals.map((modal, index) => {
+                if (modal.id === "tagsEditTagModal") {
+                    modal.visible = true;
+                } else {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
+    }
+
+    closeModal() {
+        this.setState(state => {
+            return state.modals.map((modal, index) => {
+                if (modal.id === "tagsEditTagModal") {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
     }
 
     render() {
