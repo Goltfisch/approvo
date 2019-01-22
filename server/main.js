@@ -26,4 +26,8 @@ import '/imports/api/logs/logs.js';
 import '/imports/api/logs/logs-methods.js';
 import '/imports/api/logs/logs-publications.js';
 
+import '/imports/api/tags/tags.js';
+import '/imports/api/tags/tags-methods.js';
+import '/imports/api/tags/tags-publications.js';
+
 import '/imports/api/mailService.js';
