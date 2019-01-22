@@ -9,5 +9,8 @@ Meteor.methods({
         Tags.schema.validate(tag);
 
         return Tags.insert(tag);
+    },
+    'Tags.remove' (tagId) {
+        return Tags.remove(tagId);
     }
 });
