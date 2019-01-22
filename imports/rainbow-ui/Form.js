@@ -120,12 +120,16 @@ export default class Form extends Component {
 
         return (
             <div className='form-wrapper'>
-                <div className='form-headline'>
-                    {configuration.headline}
-                </div>
-                <div className='form-description'>
-                    {configuration.description}
-                </div>
+                { configuration.headline ?
+                    <div className='form-headline'>
+                        {configuration.headline}
+                    </div> : <div></div>
+                }
+                { configuration.description ?
+                    <div className='form-description'>
+                        {configuration.description}
+                    </div> : <div></div>
+                }
                 <div className='form-inputs'>
                     {this.renderForm()}
                 </div>
