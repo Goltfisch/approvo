@@ -10,6 +10,9 @@ Meteor.methods({
 
         return Tags.insert(tag);
     },
+    'Tags.update' (tag) {
+        return Tags.update(tag._id, { $set: tag });
+    },
     'Tags.remove' (tagId) {
         return Tags.remove(tagId);
     }
