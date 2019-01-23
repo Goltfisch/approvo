@@ -102,3 +102,7 @@
 .icon-btn-wrapper {
     display: flex;
 }
+
+.icon-label {
+    cursor: pointer;
+}

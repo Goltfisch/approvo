@@ -10,6 +10,7 @@ import { EmailTemplates } from "/imports/api/emailTemplates/emailTemplates.js";
 import "/imports/ui/css/dashboard.css";
 
 import NewApprovalModal from "/imports/ui/modals/NewApprovalModal.js";
+import EditApprovalModal from "/imports/ui/modals/EditApprovalModal.js";
 
 import Table from "/imports/rainbow-ui/Table.js";
 import Button from "/imports/rainbow-ui/Button.js";
@@ -22,6 +23,7 @@ export class DashboardPage extends Component {
         super(props);
 
         this.handleNewButtonClick = this.handleNewButtonClick.bind(this);
+        this.handleEditButtonClick = this.handleEditButtonClick.bind(this);
         this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
         this.handlePageClick = this.handlePageClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -32,6 +34,13 @@ export class DashboardPage extends Component {
                     id: "dashboardAddApprovalModal",
                     content: (
                         <NewApprovalModal cancelButtonClick={this.closeModal} />
+                    ),
+                    visible: false
+                },
+                {
+                    id: "dashboardEditApprovalModal",
+                    content: (
+                        <EditApprovalModal cancelButtonClick={this.closeModal} />
                     ),
                     visible: false
                 }
@@ -123,7 +132,7 @@ export class DashboardPage extends Component {
             if (approval.link) {
                 approval.linkedName = (
                     <div className="icon-btn-wrapper">
-                        <div className="icon-label">
+                        <div className="icon-label" onClick={this.handleEditButtonClick}>
                             {approval.name}
                         </div>
                         <a href={approval.link} target="_blank" className="btn icon-btn primary-btn">
@@ -383,10 +392,24 @@ export class DashboardPage extends Component {
         });
     }
 
+    handleEditButtonClick() {
+        this.setState(state => {
+            return state.modals.map((modal, index) => {
+                if (modal.id === "dashboardEditApprovalModal") {
+                    modal.visible = true;
+                } else {
+                    modal.visible = false;
+                }
+
+                return modal;
+            });
+        });
+    }
+
     closeModal() {
         this.setState(state => {
             return state.modals.map((modal, index) => {
-                if (modal.id === "dashboardAddApprovalModal") {
+                if (modal.id === "dashboardAddApprovalModal" || modal.id === "dashboardEditApprovalModal") {
                     modal.visible = false;
                 }
 
