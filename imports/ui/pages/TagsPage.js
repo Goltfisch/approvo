@@ -87,13 +87,10 @@ export class TagsPage extends Component {
 
     handleEditButtonClick(documentId) {
         let tag = Tags.findOne(documentId);
-        console.log('call');
         if(tag && tag._id) {
-            console.log('tag', tag);
             this.setState((state) => {
                 return state.modals.map((modal, index) => {
                     if(modal.id === 'tagsEditTagModal') {
-                        console.log('YAH');
                         modal.visible = true;
                         modal.data = { tag: tag };
                     } else {
@@ -123,8 +120,6 @@ export class TagsPage extends Component {
     }
 
     getFormConfiguration() {
-        const props = this.props;
-
         return {
             id: 'new-tags-form',
             headline: 'Neuer Tag',
@@ -155,28 +150,18 @@ export class TagsPage extends Component {
         const { modals } = this.state;
 
         return modals.map((modal, index) => {
-            if (modal.visible) {
+            if(modal.visible) {
                 return (
-                    <Modal key={index} closeModal={this.closeModal}>
+                    <Modal 
+                        key={index} 
+                        closeModal={this.closeModal} 
+                        modalData={modal.data}
+                    >
                         {modal.content}
                     </Modal>
                 );
             }
-        });
-    }
-
-    handleEditButtonClick() {
-        this.setState(state => {
-            return state.modals.map((modal, index) => {
-                if (modal.id === "tagsEditTagModal") {
-                    modal.visible = true;
-                } else {
-                    modal.visible = false;
-                }
-
-                return modal;
-            });
-        });
+        })
     }
 
     closeModal() {
@@ -196,6 +181,7 @@ export class TagsPage extends Component {
 
         return (
             <div className='tags-page'>
+                {this.renderModals()}
                 <div className='content-tags-actions'>
                     <div className='content-tags-actions-left'>
                         <h2>Tagverwaltung</h2>
