@@ -57,6 +57,17 @@ Meteor.methods({
 
         return approvalInsert;
     },
+    'Approvals.update' (approval) {
+        const currentUser = Meteor.user();
+
+        if(currentUser.userRole != 'admin' || approval.owner && (currentUser._id != approval.owner)) {
+            throw new Meteor.Error('not-allowed', 'You are not allowed');
+        } else {
+            Approvals.schema.validate(approval);
+
+            Approvals.update(approval._id, { $set: approval });
+        }
+    },
     'Approvals.approve'(documentId) {
         const approval = Approvals.findOne(documentId);
         const currentUser = Meteor.user();

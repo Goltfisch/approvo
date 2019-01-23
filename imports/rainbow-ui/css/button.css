@@ -106,3 +106,7 @@
 .icon-label {
     cursor: pointer;
 }
+
+.icon-label i {
+    margin-right: 5px;
+}

@@ -42,7 +42,8 @@ export class DashboardPage extends Component {
                     content: (
                         <EditApprovalModal cancelButtonClick={this.closeModal} />
                     ),
-                    visible: false
+                    visible: false,
+                    data: {}
                 }
             ]
         };
@@ -129,20 +130,29 @@ export class DashboardPage extends Component {
         let { approvals, currentUser } = this.props;
 
         return approvals.map(approval => {
-            if (approval.link) {
-                approval.linkedName = (
-                    <div className="icon-btn-wrapper">
-                        <div className="icon-label" onClick={this.handleEditButtonClick}>
-                            {approval.name}
-                        </div>
-                        <a href={approval.link} target="_blank" className="btn icon-btn primary-btn">
-                            <i className="fas fa-external-link-square-alt"></i>
-                        </a>
-                    </div>
-                );
-            } else {
-                approval.linkedName = approval.name;
+            let isAllowedToEdit = false;
+
+            if(currentUser && (currentUser.userRole == 'admin' || currentUser._id == approval.owner)) {
+                isAllowedToEdit = true;
             }
+
+            approval.linkedName = (
+                <div className="icon-btn-wrapper">
+                    {isAllowedToEdit ?
+                        <Button 
+                            handleClick={this.handleEditButtonClick}
+                            documentId={approval._id}
+                            className="icon-label"
+                        >
+                            <i className="far fa-edit"></i>
+                            {approval.name}
+                        </Button> 
+                    : <div>{approval.name}</div>}
+                    {approval.link ? <a href={approval.link} target="_blank" className="btn icon-btn primary-btn">
+                        <i className="fas fa-external-link-square-alt"></i>
+                    </a> : ''}
+                </div>
+            );
 
             let buttonActions = {};
 
@@ -370,7 +380,7 @@ export class DashboardPage extends Component {
         return modals.map((modal, index) => {
             if (modal.visible) {
                 return (
-                    <Modal key={index} closeModal={this.closeModal}>
+                    <Modal key={index} closeModal={this.closeModal} modalData={modal.data}>
                         {modal.content}
                     </Modal>
                 );
@@ -392,11 +402,12 @@ export class DashboardPage extends Component {
         });
     }
 
-    handleEditButtonClick() {
+    handleEditButtonClick(documentId) {
         this.setState(state => {
             return state.modals.map((modal, index) => {
                 if (modal.id === "dashboardEditApprovalModal") {
                     modal.visible = true;
+                    modal.data = { approvalId: documentId };
                 } else {
                     modal.visible = false;
                 }
