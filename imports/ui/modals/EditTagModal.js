@@ -13,7 +13,7 @@ class EditTagModal extends Component {
             id: 'update-tag-form',
             headline: 'Tag bearbeiten',
             inputs: [
-                { label: 'Tag', type: 'text', name: 'name', placeholder: tag.name },
+                { label: 'Tag', type: 'text', name: 'name', placeholder: 'Z.B. Büroartikel' },
             ],
             buttons: [
                 {
@@ -29,7 +29,7 @@ class EditTagModal extends Component {
                     type: 'submit',
                     className: 'primary',
                     onClick: (formData) => {
-                        Meteor.call('Tags.insert', {
+                        Meteor.call('Tags.update', {
                             _id: tag._id,
                             ...formData
                         });
@@ -38,7 +38,7 @@ class EditTagModal extends Component {
                     }
                 }
             ],
-            data: user
+            data: tag
         }
     }
 
