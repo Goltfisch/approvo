@@ -8,8 +8,6 @@ import { Approvals } from "/imports/api/approvals/approvals.js";
 import { EmailTemplates } from "/imports/api/emailTemplates/emailTemplates.js";
 import { Tags } from '/imports/api/tags/tags.js';
 
-import "/imports/ui/css/dashboard.css";
-
 import NewApprovalModal from "/imports/ui/modals/NewApprovalModal.js";
 import EditApprovalModal from "/imports/ui/modals/EditApprovalModal.js";
 
@@ -18,6 +16,8 @@ import Button from "/imports/rainbow-ui/Button.js";
 import Search from "/imports/rainbow-ui/Search.js";
 import Badge from "/imports/rainbow-ui/Badge.js";
 import Modal from "/imports/rainbow-ui/Modal.js";
+
+import "/imports/ui/css/dashboard.css";
 
 export class DashboardPage extends Component {
     constructor(props) {
@@ -408,11 +408,13 @@ export class DashboardPage extends Component {
     }
 
     handleEditButtonClick(documentId) {
+        const { tags } = this.props;
+        
         this.setState(state => {
             return state.modals.map((modal, index) => {
                 if (modal.id === "dashboardEditApprovalModal") {
                     modal.visible = true;
-                    modal.data = { approvalId: documentId };
+                    modal.data = { approvalId: documentId, tags: tags };
                 } else {
                     modal.visible = false;
                 }
