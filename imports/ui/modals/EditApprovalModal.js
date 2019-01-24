@@ -70,20 +70,49 @@ class EditApprovalModal extends Component {
         };
 
         if(currentUser && currentUser.userRole == 'admin') {
+            const { users } = this.props;
+
+            let userOptions = [];
+            users.forEach(function(user) {
+                userOptions.push({
+                    label: user.name,
+                    value: user._id
+                });
+            });
+
+            let stateOptions = [
+                {
+                    label: 'Angefragt',
+                    value: 'requested'
+                },
+                {
+                    label: 'Freigegeben',
+                    value: 'approve'
+                },
+                {
+                    label: 'Bestellt',
+                    value: 'order'
+                },
+                {
+                    label: 'Abschlossen',
+                    value: 'complete'
+                },
+                {
+                    label: 'Abgelehnt',
+                    value: 'decline'
+                },
+                {
+                    label: 'Zurückgestellt',
+                    value: 'shelved'
+                },
+            ];
+
             formConfiguration.inputs.push({
-                label: 'Status', type: 'select', name: 'state', options: [
-                    { label: 'State1', value: 'state1' },
-                    { label: 'State2', value: 'state2' },
-                    { label: 'State3', value: 'state3' },
-                ]
+                label: 'Status', type: 'select', name: 'state', options: stateOptions, defaultValue: approval.state
             });
 
             formConfiguration.inputs.push({
-                label: 'Benutzer', type: 'select', name: 'owner', options: [
-                    { label: 'Benutzer1', value: 'user1' },
-                    { label: 'Benutzer2', value: 'user2' },
-                    { label: 'Benutzer3', value: 'user3' },
-                ]
+                label: 'Benutzer', type: 'select', name: 'owner', options: userOptions, defaultValue: approval.owner
             });
         };
 
@@ -104,11 +133,14 @@ export default withTracker((props) => {
     const approvalId = props.modalData.approvalId;
 
     Meteor.subscribe("dashboard.approval", approvalId);
-
+    Meteor.subscribe('Usermanagement.users', {}, {});
+    
     const approval = Approvals.findOne(approvalId);
+    const users = Meteor.users.find({}, { sort: { createdAt: -1 }}).fetch();
 
     return {
         approval,
+        users,
         currentUser: Meteor.user()
     };
 })(EditApprovalModal);

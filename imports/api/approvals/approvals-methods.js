@@ -60,12 +60,12 @@ Meteor.methods({
     'Approvals.update' (approval) {
         const currentUser = Meteor.user();
 
-        if(currentUser.userRole != 'admin' || approval.owner && (currentUser._id != approval.owner)) {
-            throw new Meteor.Error('not-allowed', 'You are not allowed');
-        } else {
+        if(currentUser.userRole == 'admin' || (approval.owner && currentUser._id == approval.owner)) {
             Approvals.schema.validate(approval);
 
             Approvals.update(approval._id, { $set: approval });
+        } else {
+            throw new Meteor.Error('not-allowed', 'You are not allowed');
         }
     },
     'Approvals.approve'(documentId) {

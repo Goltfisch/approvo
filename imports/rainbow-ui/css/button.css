@@ -105,6 +105,10 @@
 
 .icon-label {
     cursor: pointer;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    font-size: 14px;
 }
 
 .icon-label i {
