@@ -21,13 +21,13 @@ class NewApprovalModal extends Component {
 
         this.state = {
             tags: [],
-            suggestions: this.getApprovalTags()
+            suggestions: this.getTags()
         };
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
     }
 
-    getApprovalTags() {
+    getTags() {
         const { newTags } = this.props;
 
         newTags.forEach(tag => {
@@ -51,6 +51,7 @@ class NewApprovalModal extends Component {
     }
 
     getFormConfiguration() {
+        const { tags } = this.state;
         const props = this.props;
 
         return {
@@ -72,6 +73,15 @@ class NewApprovalModal extends Component {
                 },
                 { label: "Speichern", type: "submit", className: "primary",
                     onClick: formData => {
+                        let newApprovalTags = [];
+
+                        if(tags) {
+                            tags.forEach(tag => {
+                                newApprovalTags.push(tag._id);
+                            });
+                        }
+
+                        formData.tags = newApprovalTags;
                         formData.amount = accounting.unformat( formData.amount, "," );
                         Meteor.call( "Approvals.insert", formData, (error, response) => {
                             if (error) {
