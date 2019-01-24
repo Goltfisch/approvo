@@ -37,6 +37,14 @@ Approvals.schema = new SimpleSchema( {
         type: String,
         required: false
     },
+    tags: {
+        type: Array,
+        required: true
+    },
+    'tags.$': {
+        type: String,
+        required: false
+    },
     createdAt: {
         type: Date,
         required: false
@@ -52,5 +60,6 @@ Approvals.publicFields = {
     owner: 1,
     lastEditByAdmin: 1,
     lastEditByShopping: 1,
+    tags: 1,
     createdAt: 1
 };
