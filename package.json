@@ -18,6 +18,7 @@
     "react-meteor-data": "^0.2.11",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "react-tag-input": "^6.2.0",
     "simpl-schema": "^1.5.3"
   }
 }
