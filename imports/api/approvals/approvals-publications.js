@@ -36,6 +36,14 @@ Meteor.publish('dashboard.approvals', function (searchQuery, currentPage) {
     return Approvals.find(q, p);
 });
 
+Meteor.publish('dashboard.approval', function (approvalId) {
+    if(!this.userId) {
+        throw new Meteor.Error('not authorized', 'You are not authorized!');
+    }
+    
+    return Approvals.find({ _id: approvalId });
+});
+
 Meteor.publish('statistics.approvals', function() {
     if(!this.userId) {
         throw new Meteor.Error('not authorized', 'You are not authorized!');     
