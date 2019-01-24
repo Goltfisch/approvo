@@ -3,14 +3,82 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Bert } from 'meteor/themeteorchef:bert';
 import moment from 'moment';
 import accounting from 'accounting';
+import { WithContext as ReactTags } from "react-tag-input";
 
 import { Approvals } from "/imports/api/approvals/approvals.js";
+import { Tags } from '/imports/api/tags/tags.js';
 
 import Form from '/imports/rainbow-ui/Form.js';
 
+import "/imports/ui/css/tags.css";
+
+const KeyCodes = {
+    enter: 13
+};
+
+const delimiters = [KeyCodes.enter];
+
 class EditApprovalModal extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tags: this.getApprovalTags(),
+            suggestions: this.getTags()
+        };
+
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+    }
+
+    getApprovalTags() {
+        const { approval } = this.props;
+        let tagList = [];
+
+        if(approval.tags && approval.tags.length >= 1) {
+            approval.tags.forEach(tag => {
+                tagList.push(Tags.findOne(tag));
+            });
+        }
+
+        if(tagList) {
+            tagList.forEach(item => {
+                item.id = item._id;
+                item.text = item.name;
+            });
+
+            return tagList;
+        }else {
+            return [];
+        }
+    }
+
+    getTags() {
+        const { newTags } = this.props;
+
+        newTags.forEach(tag => {
+            tag.id = tag._id;
+            tag.text = tag.name;
+        });
+
+        return newTags;
+    }
+
+    handleDelete(i) {
+        const { tags } = this.state;
+
+        this.setState({
+            tags: tags.filter((tag, index) => index !== i)
+        });
+    }
+
+    handleAddition(tag) {
+        this.setState(state => ({ tags: [...state.tags, tag] }));
+    }
+
     getFormConfiguration() {
         const props = this.props;
+        const { tags } = this.state;
 
         const { approval, currentUser } = props;
 
@@ -50,8 +118,16 @@ class EditApprovalModal extends Component {
                     type: 'submit',
                     className: 'primary',
                     onClick: (formData) => {
-                        formData.amount = accounting.unformat(formData.amount, ',');
+                        let newApprovalTags = [];
 
+                        if(tags) {
+                            tags.forEach(tag => {
+                                newApprovalTags.push(tag._id);
+                            });
+                        }
+
+                        formData.tags = newApprovalTags;
+                        formData.amount = accounting.unformat(formData.amount, ',');
                         Meteor.call('Approvals.update', {
                             _id: approval._id,
                             ...formData
@@ -120,9 +196,26 @@ class EditApprovalModal extends Component {
     }
 
     render() {
+        const { tags, suggestions } = this.state;
+
+        let placeholder = "Tags hinzufügen";
+
         return (
-            <div className="content-approval-form">
-                <Form configuration={this.getFormConfiguration()} />
+            <div className="content-approval">
+                <div className="content-approval-form">
+                    <Form configuration={this.getFormConfiguration()} />
+                </div>
+
+                <div className="content-approval-tags">
+                    <ReactTags
+                        tags={tags}
+                        suggestions={suggestions}
+                        handleDelete={this.handleDelete}
+                        handleAddition={this.handleAddition}
+                        delimiters={delimiters}
+                        placeholder={placeholder}
+                    />
+                </div>
             </div>
         )
     }
@@ -131,6 +224,7 @@ class EditApprovalModal extends Component {
 export default withTracker((props) => {
 
     const approvalId = props.modalData.approvalId;
+    const newTags = props.modalData.tags;
 
     Meteor.subscribe("dashboard.approval", approvalId);
     Meteor.subscribe('Usermanagement.users', {}, {});
@@ -141,6 +235,7 @@ export default withTracker((props) => {
     return {
         approval,
         users,
-        currentUser: Meteor.user()
+        currentUser: Meteor.user(),
+        newTags
     };
 })(EditApprovalModal);
