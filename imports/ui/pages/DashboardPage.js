@@ -6,6 +6,7 @@ import moment from "moment";
 
 import { Approvals } from "/imports/api/approvals/approvals.js";
 import { EmailTemplates } from "/imports/api/emailTemplates/emailTemplates.js";
+import { Tags } from '/imports/api/tags/tags.js';
 
 import "/imports/ui/css/dashboard.css";
 
@@ -35,7 +36,8 @@ export class DashboardPage extends Component {
                     content: (
                         <NewApprovalModal cancelButtonClick={this.closeModal} />
                     ),
-                    visible: false
+                    visible: false,
+                    data: {}
                 },
                 {
                     id: "dashboardEditApprovalModal",
@@ -389,10 +391,13 @@ export class DashboardPage extends Component {
     }
 
     handleNewButtonClick() {
+        const { tags } = this.props;
+
         this.setState(state => {
             return state.modals.map((modal, index) => {
                 if (modal.id === "dashboardAddApprovalModal") {
                     modal.visible = true;
+                    modal.data = { tags: tags };
                 } else {
                     modal.visible = false;
                 }
@@ -482,8 +487,10 @@ export default withTracker(props => {
 
     Meteor.subscribe("dashboard.approvals", q, p);
     Meteor.subscribe("Usermanagement.users");
+    Meteor.subscribe("tags");
 
     const approvals = Approvals.find({}, { sort: { date: -1 } }).fetch();
+    const tags = Tags.find().fetch();
 
     approvals.forEach(approval => {
         let owner = Meteor.users.findOne(approval.owner);
@@ -497,6 +504,7 @@ export default withTracker(props => {
         approvals,
         approvalsCount: Counts.get("dashboardApprovalsCount"),
         currentUser: Meteor.user(),
-        emails: EmailTemplates.find().fetch()
+        emails: EmailTemplates.find().fetch(),
+        tags
     };
 })(DashboardPage);
