@@ -23,6 +23,7 @@ class NewApprovalModal extends Component {
             tags: [],
             suggestions: this.getTags()
         };
+
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
     }
@@ -83,13 +84,16 @@ class NewApprovalModal extends Component {
 
                         formData.tags = newApprovalTags;
                         formData.amount = accounting.unformat( formData.amount, "," );
+
+                        props.cancelButtonClick();
+                        Bert.alert( "Warte auf Ergebnis...", "info", "growl-top-right" );
+                        
                         Meteor.call( "Approvals.insert", formData, (error, response) => {
                             if (error) {
                                 return Bert.alert( error.reason, "danger", "growl-top-right" );
                             }
 
                             Bert.alert( "Anfrage wurde erstellt!", "info", "growl-top-right" );
-                            props.cancelButtonClick();
                         });
                     }
                 }
