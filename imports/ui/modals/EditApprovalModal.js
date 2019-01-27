@@ -96,7 +96,7 @@ class EditApprovalModal extends Component {
         let formConfiguration = {
             id: 'edit-approval-form',
             headline: 'Freigabe bearbeiten',
-            description: 'Bearbeite die Fragen "'+ approval.name +'"',
+            description: 'Bearbeite die Anfage "'+ approval.name +'"',
             inputs: [
                 { label: 'Name', type: 'text', name: 'name', defaultValue: approval.name, placeholder: 'Was benötigst du?' },
                 { label: 'Betrag', type: 'text', name: 'amount', defaultValue: formattedAmount, placeholder: 'Wie hoch ist der Beitrag?' },
@@ -128,6 +128,7 @@ class EditApprovalModal extends Component {
 
                         formData.tags = newApprovalTags;
                         formData.amount = accounting.unformat(formData.amount, ',');
+                        formData.owner = approval.owner;
                         Meteor.call('Approvals.update', {
                             _id: approval._id,
                             ...formData
