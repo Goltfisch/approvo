@@ -60,7 +60,7 @@ Meteor.methods({
     'Approvals.update' (approval) {
         const currentUser = Meteor.user();
 
-        if(currentUser.userRole == 'admin' || (approval.owner && currentUser._id == approval.owner)) {
+        if(currentUser.userRole == 'admin' || currentUser._id == approval.owner) {
             Approvals.schema.validate(approval);
 
             Approvals.update(approval._id, { $set: approval });
