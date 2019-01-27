@@ -64,7 +64,7 @@ class NewApprovalModal extends Component {
                 { label: "Betrag", type: "text", name: "amount", defaultValue: "0", placeholder: "Wie hoch ist der Beitrag?" },
                 { label: "Grund", type: "text", name: "reason", placeholder: "Was ist der Grund für den Kauf?" },
                 { label: "Datum", type: "date", name: "date", placeholder: "Welcher Tag ist heute?", defaultValue: moment().format("YYYY-MM-DD") },
-                { label: "Link", type: "text", name: "link", placeholder: "Wo kann der Artikel eingesehen werden?" }
+                { label: "Link", type: "text", name: "link", placeholder: "Wo kann der Artikel eingesehen werden? (Link zum Artikel)" }
             ],
             buttons: [
                 { label: "Abbrechen", type: "cancel", className: "secondary",
