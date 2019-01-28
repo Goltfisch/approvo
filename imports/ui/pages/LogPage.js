@@ -96,7 +96,7 @@ export default withTracker((props) => {
 
     Meteor.subscribe('logs', q, p);
 
-    const logs = Logs.find({}, { sort: { date: 1 }}).fetch();
+    const logs = Logs.find({}, { sort: { createdAt: 1 }}).fetch();
 
     return {
       logs,
