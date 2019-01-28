@@ -491,7 +491,7 @@ export default withTracker(props => {
     Meteor.subscribe("Usermanagement.users");
     Meteor.subscribe("tags");
 
-    const approvals = Approvals.find({}, { sort: { date: -1 } }).fetch();
+    const approvals = Approvals.find({}, { sort: { createdAt: -1 } }).fetch();
     const tags = Tags.find().fetch();
 
     approvals.forEach(approval => {
