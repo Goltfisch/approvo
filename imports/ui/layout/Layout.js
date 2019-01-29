@@ -57,7 +57,7 @@ class Layout extends Component {
     
     render() {
         return (
-            <div className='page'>
+            <div className='page' style={{ overflowX: 'hidden' }}>
                 <NavigationBar 
                     logo="images/logo.png"
                     listItems={this.getListItems()}
