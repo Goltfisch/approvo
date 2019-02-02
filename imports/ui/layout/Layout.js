@@ -37,15 +37,21 @@ class Layout extends Component {
                     to: '/tags',
                     name: 'Tags',
                 });
-                
+
                 navigationListItems.push({
                     id: 5,
+                    to: '/rules',
+                    name: 'Regeln',
+                });
+                
+                navigationListItems.push({
+                    id: 6,
                     to: '/log',
                     name: 'Log',
                 });
 
                 navigationListItems.push({
-                    id: 6,
+                    id: 7,
                     to: '/statistics',
                     name: 'Statistiken',
                 });
