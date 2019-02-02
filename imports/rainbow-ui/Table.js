@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 
+import { UserRoles } from '/imports/api/user/userRoles/userRoles.js';
+import { Tags } from '/imports/api/tags/tags.js';
+
 import Page from '/imports/rainbow-ui/Page.js';
 
 import './css/table.css';
 import './css/pagination.css';
 
 export default class Table extends Component {
+    constructor(props) {
+        super(props);
+
+        Meteor.subscribe("user.roles");
+        Meteor.subscribe("tags");
+    }
+
     renderTableHead() {
         return this.props.head.map((headItem) => {
             return <th key={headItem.key} className={this.getColsizeClassName(headItem.col)}>{headItem.content}</th>;
@@ -36,6 +46,20 @@ export default class Table extends Component {
                 item = row[headItem.key];
             }
 
+            if(headItem && headItem.relationData) {
+                let tag = Tags.findOne(row[headItem.relationData]);
+
+                if(tag && tag._id) {
+                    item = tag.name
+                }else {
+                    let role = UserRoles.findOne(row[headItem.relationData]);
+
+                    if(role && role._id) {
+                        item = role.name
+                    }
+                }
+            }
+            
             return <td className={headItem.cls} key={headItem.key}>{item}</td>;
         });
     }
