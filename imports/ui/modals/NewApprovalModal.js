@@ -82,6 +82,10 @@ class NewApprovalModal extends Component {
                             });
                         }
 
+                        if(formData.amount.indexOf('.')) {
+                            formData.amount = formData.amount.replace('.', ',');
+                        }
+
                         formData.tags = newApprovalTags;
                         formData.amount = accounting.unformat( formData.amount, "," );
 
