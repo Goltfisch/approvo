@@ -3,6 +3,8 @@ import { withTracker } from 'meteor/react-meteor-data';
 import accounting from 'accounting';
 
 import { Rules } from '/imports/api/rules/rules.js';
+import { UserRoles } from '/imports/api/user/userRoles/userRoles.js';
+import { Tags } from '/imports/api/tags/tags.js';
 
 import EditRuleModal from "/imports/ui/modals/EditRuleModal.js";
 import Table from '/imports/rainbow-ui/Table.js';
@@ -38,19 +40,28 @@ export class RulesPage extends Component {
     getTableHeader() {
         return [
             {
-                key: 'roleId',
+                key: 'roleLabel',
                 content: 'Rolle',
+                relationData: 'roleId',
+                relationalTable: 'UserRoles',
                 col: '3'
             },
             {
-                key: "tagId",
+                key: "tagLabel",
                 content: "Tag",
+                relationData: 'tagId',
+                relationalTable: 'Tags',
                 col: "3"
             },
             {
                 key: "budget",
                 content: "Budget",
                 col: "3"
+            },
+            {
+                key: "actions",
+                content: "Aktion",
+                col: "1"
             }
         ];
     }
@@ -60,8 +71,8 @@ export class RulesPage extends Component {
 
         let buttonActions = {};
 
-        return rules.map(tag => {
-            buttonActions = this.getTagActions(rule._id);
+        return rules.map(rule => {
+            buttonActions = this.getRuleActions(rule._id);
 
             return Object.assign({}, rule, buttonActions);
         });
@@ -93,13 +104,19 @@ export class RulesPage extends Component {
     }
 
     handleEditButtonClick(documentId) {
+        const { roles, tags } = this.props;
         let rule = Rules.findOne(documentId);
+        
         if(rule && rule._id) {
             this.setState((state) => {
                 return state.modals.map((modal, index) => {
                     if(modal.id === 'rulesEditRuleModal') {
                         modal.visible = true;
-                        modal.data = { rule: rule };
+                        modal.data = {
+                            rule: rule,
+                            roles: roles,
+                            tags: tags
+                        };
                     } else {
                         modal.visible = false;
                     }
@@ -127,12 +144,30 @@ export class RulesPage extends Component {
     }
 
     getFormConfiguration() {
+        const { roles, tags } = this.props;
+
+        let roleOptions = [];
+        roles.forEach(function(role) {
+            roleOptions.push({
+                label: role.name,
+                value: role._id
+            });
+        });
+
+        let tagOptions = [];
+        tags.forEach(function(tag) {
+            tagOptions.push({
+                label: tag.name,
+                value: tag._id
+            });
+        });
+
         return {
             id: 'new-rules-form',
             headline: 'Neue Regel',
             inputs: [
-                { label: 'Rolle', name: 'roleId', type: 'text', placeholder: 'Rolle' },
-                { label: 'Tag', name: 'tagId', type: 'text', placeholder: 'Tag' },
+                { label: 'Rolle', name: 'roleId', type: 'select', placeholder: 'Rolle', options: roleOptions },
+                { label: 'Tag', name: 'tagId', type: 'select', placeholder: 'Tag', options: tagOptions },
                 { label: 'Budget', name: 'budget', type: 'text', placeholder: 'Budget' },
             ],
             buttons: [
@@ -150,6 +185,8 @@ export class RulesPage extends Component {
 
                             Bert.alert('Rolle wurde erstellt!', 'info', 'growl-top-right');
                         });
+
+                        formData.budget = '';
                     }
                 }
             ],
@@ -224,11 +261,17 @@ export default withTracker(props => {
     }
 
     Meteor.subscribe("rules", p);
+    Meteor.subscribe("tags");
+    Meteor.subscribe("user.roles");
 
     const rules = Rules.find({}, { sort: { createdAt: -1 } }).fetch();
+    const roles = UserRoles.find().fetch();
+    const tags = Tags.find().fetch();
 
     return {
         rules,
+        roles,
+        tags,
         ruleCount: Counts.get("RuleCount"),
         currentUser: Meteor.user()
     };

@@ -140,6 +140,8 @@ export class TagsPage extends Component {
 
                             Bert.alert('Tag wurde erstellt!', 'info', 'growl-top-right');
                         });
+                        
+                        formData.name = '';
                     }
                 }
             ],
