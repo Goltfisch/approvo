@@ -30,4 +30,8 @@ import '/imports/api/tags/tags.js';
 import '/imports/api/tags/tags-methods.js';
 import '/imports/api/tags/tags-publications.js';
 
+import '/imports/api/rules/rules.js';
+import '/imports/api/rules/rules-methods.js';
+import '/imports/api/rules/rules-publications.js';
+
 import '/imports/api/mailService.js';
