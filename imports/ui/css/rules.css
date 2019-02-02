@@ -1,0 +1,14 @@
+.rules-page-container {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+.table-content-rules {
+    float: left;
+    width: 65%;
+}
+
+.form-content-rules {
+    float: right;
+    width: 30%;
+}
