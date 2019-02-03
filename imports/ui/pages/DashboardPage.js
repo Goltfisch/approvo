@@ -7,6 +7,8 @@ import moment from "moment";
 import { Approvals } from "/imports/api/approvals/approvals.js";
 import { EmailTemplates } from "/imports/api/emailTemplates/emailTemplates.js";
 import { Tags } from '/imports/api/tags/tags.js';
+import { Rules } from '/imports/api/rules/rules.js';
+import { UserRoles } from '/imports/api/user/userRoles/userRoles.js';
 
 import NewApprovalModal from "/imports/ui/modals/NewApprovalModal.js";
 import EditApprovalModal from "/imports/ui/modals/EditApprovalModal.js";
@@ -157,11 +159,25 @@ export class DashboardPage extends Component {
             );
 
             let buttonActions = {};
+            let currenUserRole = UserRoles.findOne({ value: currentUser.userRole });
+            let userRule = false;
+            let rules = [];
+            
+            if(currenUserRole && currenUserRole._id) {
+                rules = Rules.find({ $or: [{ roleId: currenUserRole._id, budget: { $gte: approval.amount } }, { roleId: currenUserRole._id, budget: -1 }] }).fetch();
+            }
 
-            if (
-                currentUser.userRole == "admin" ||
-                currentUser.userRole == "shopping"
-            ) {
+            if(approval.tags && approval.tags.length >= 1 && rules && rules.length >= 1) {
+                approval.tags.forEach(tag => {
+                    rules.forEach(rule =>{
+                        if(tag == rule.tagId) {
+                            return userRule = true;
+                        }
+                    });
+                });
+            }
+
+            if (currentUser.userRole == "admin" || currentUser.userRole == "shopping" || userRule && approval.state == 'requested' ) {
                 buttonActions = this.getStateActions(approval.state, approval._id);
             }
 
@@ -243,126 +259,56 @@ export class DashboardPage extends Component {
         let emails = [];
         switch (action) {
             case "approve":
-                Meteor.call(
-                    "Approvals.approve",
-                    documentId,
-                    emails,
-                    (error, result) => {
-                        if (error) {
-                            Bert.alert(
-                                error.reason,
-                                "danger",
-                                "growl-top-right"
-                            );
-                            return;
-                        }
-
-                        Bert.alert(
-                            "Anfrage wurde freigegeben!",
-                            "success",
-                            "growl-top-right"
-                        );
+                Meteor.call("Approvals.approve", documentId, emails, (error, result) => {
+                    if (error) {
+                        return Bert.alert(error.reason, "danger", "growl-top-right" );
                     }
-                );
+
+                    Bert.alert("Anfrage wurde freigegeben!", "success", "growl-top-right" );
+                });
 
                 break;
 
             case "order":
-                Meteor.call(
-                    "Approvals.order",
-                    documentId,
-                    emails,
-                    (error, result) => {
-                        if (error) {
-                            Bert.alert(
-                                error.reason,
-                                "danger",
-                                "growl-top-right"
-                            );
-                            return;
-                        }
-
-                        Bert.alert(
-                            "Artikel wurde bestellt!",
-                            "success",
-                            "growl-top-right"
-                        );
+                Meteor.call("Approvals.order", documentId, emails, (error, result) => {
+                    if (error) {
+                        return Bert.alert(error.reason, "danger", "growl-top-right" );
                     }
-                );
+
+                    Bert.alert("Artikel wurde bestellt!", "success", "growl-top-right" );
+                });
 
                 break;
 
             case "complete":
-                Meteor.call(
-                    "Approvals.complete",
-                    documentId,
-                    emails,
-                    (error, result) => {
-                        if (error) {
-                            Bert.alert(
-                                error.reason,
-                                "danger",
-                                "growl-top-right"
-                            );
-                            return;
-                        }
-
-                        Bert.alert(
-                            "Freigabe wurde abgeschlossen!",
-                            "success",
-                            "growl-top-right"
-                        );
+                Meteor.call( "Approvals.complete", documentId, emails, (error, result) => {
+                    if (error) {
+                        return Bert.alert(error.reason, "danger", "growl-top-right" );
                     }
-                );
+
+                    Bert.alert("Freigabe wurde abgeschlossen!", "success", "growl-top-right" );
+                });
 
                 break;
 
             case "decline":
-                Meteor.call(
-                    "Approvals.decline",
-                    documentId,
-                    emails,
-                    (error, result) => {
-                        if (error) {
-                            Bert.alert(
-                                error.reason,
-                                "danger",
-                                "growl-top-right"
-                            );
-                            return;
-                        }
-
-                        Bert.alert(
-                            "Anfrage wurde abgelehnt!",
-                            "success",
-                            "growl-top-right"
-                        );
+                Meteor.call("Approvals.decline", documentId, emails, (error, result) => {
+                    if (error) {
+                        return Bert.alert( error.reason, "danger", "growl-top-right" );
                     }
-                );
+
+                    Bert.alert( "Anfrage wurde abgelehnt!", "success", "growl-top-right" );
+                });
 
                 break;
             case "shelved":
-                Meteor.call(
-                    "Approvals.shelved",
-                    documentId,
-                    emails,
-                    (error, result) => {
-                        if (error) {
-                            Bert.alert(
-                                error.reason,
-                                "danger",
-                                "growl-top-right"
-                            );
-                            return;
-                        }
-
-                        Bert.alert(
-                            "Anfrage wurde zurückgestellt!",
-                            "success",
-                            "growl-top-right"
-                        );
+                Meteor.call("Approvals.shelved", documentId, emails, (error, result) => {
+                    if (error) {
+                        return Bert.alert(error.reason, "danger", "growl-top-right" );
                     }
-                );
+
+                    Bert.alert("Anfrage wurde zurückgestellt!", "success", "growl-top-right" );
+                });
 
                 break;
         }
@@ -489,7 +435,9 @@ export default withTracker(props => {
 
     Meteor.subscribe("dashboard.approvals", q, p);
     Meteor.subscribe("Usermanagement.users");
+    Meteor.subscribe("user.roles");
     Meteor.subscribe("tags");
+    Meteor.subscribe("rules");
 
     const approvals = Approvals.find({}, { sort: { createdAt: -1 } }).fetch();
     const tags = Tags.find().fetch();
