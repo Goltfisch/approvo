@@ -8,7 +8,6 @@ Meteor.publish('rules', function (currentPage) {
     }
 
     let p = {
-        fields: Rules.publicFields,
         sort: { createdAt: -1 },
     };
 
