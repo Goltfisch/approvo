@@ -186,7 +186,7 @@ export class TagsPage extends Component {
                 {this.renderModals()}
                 <div className='content-tags-actions'>
                     <div className='content-tags-actions-left'>
-                        <h2>Tagverwaltung</h2>
+                        <h2>Tags</h2>
                     </div>
 
                     <div className="table-content-tags">

@@ -203,7 +203,7 @@ export class UserManagementPage extends Component {
                 <div className='content-users'>
                     <div className='content-users-actions'>
                         <div className='content-users-actions-left'>
-                            <h2>Benutzer</h2>
+                            <h2>Benutzerverwaltung</h2>
                             <Button 
                                 className='btn primary-btn' 
                                 handleClick={this.handleNewButtonClick}

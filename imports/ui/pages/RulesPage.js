@@ -231,7 +231,7 @@ export class RulesPage extends Component {
                 {this.renderModals()}
                 <div className='content-rules-actions'>
                     <div className='content-rules-actions-left'>
-                        <h2>Regelmanagement</h2>
+                        <h2>Regeln</h2>
                     </div>
 
                     <div className="table-content-rules">
