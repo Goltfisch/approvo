@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Approvals } from './approvals.js'
+import { Rules } from '/imports/api/rules/rules.js';
+import { UserRoles } from '/imports/api/user/userRoles/userRoles.js';
 
 Meteor.methods({
     'Approvals.insert' (approval, emails) {
@@ -74,7 +76,25 @@ Meteor.methods({
 
         Approvals.schema.validate(approval);
 
-        if(currentUser.userRole != 'admin') {
+        let currenUserRole = UserRoles.findOne({ value: currentUser.userRole });
+        let userRule = false;
+        let rules = [];
+        
+        if(currenUserRole && currenUserRole._id) {
+            rules = Rules.find({ $or: [{ roleId: currenUserRole._id, budget: { $gte: approval.amount } }, { roleId: currenUserRole._id, budget: -1 }] }).fetch();
+        }
+
+        if(approval.tags && approval.tags.length >= 1 && rules && rules.length >= 1) {
+            approval.tags.forEach(tag => {
+                rules.forEach(rule =>{
+                    if(tag == rule.tagId) {
+                        return userRule = true;
+                    }
+                });
+            });
+        }
+
+        if(currentUser.userRole != 'admin' && !userRule) {
             throw new Meteor.Error('not-allowed', 'You are not allowed');
         } else {
             if(approval && approval.state && approval.state === 'requested' || approval.state === 'shelved') {
@@ -245,7 +265,25 @@ Meteor.methods({
 
         Approvals.schema.validate(approval);
 
-        if(currentUser.userRole != 'admin') {
+        let currenUserRole = UserRoles.findOne({ value: currentUser.userRole });
+        let userRule = false;
+        let rules = [];
+        
+        if(currenUserRole && currenUserRole._id) {
+            rules = Rules.find({ $or: [{ roleId: currenUserRole._id, budget: { $gte: approval.amount } }, { roleId: currenUserRole._id, budget: -1 }] }).fetch();
+        }
+
+        if(approval.tags && approval.tags.length >= 1 && rules && rules.length >= 1) {
+            approval.tags.forEach(tag => {
+                rules.forEach(rule =>{
+                    if(tag == rule.tagId) {
+                        return userRule = true;
+                    }
+                });
+            });
+        }
+
+        if(currentUser.userRole != 'admin' && !userRule) {
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             if(approval && approval.state && approval.state == 'requested' || approval.state === 'shelved') {
@@ -303,7 +341,25 @@ Meteor.methods({
 
         Approvals.schema.validate(approval);
 
-        if(currentUser.userRole != 'admin') {
+        let currenUserRole = UserRoles.findOne({ value: currentUser.userRole });
+        let userRule = false;
+        let rules = [];
+        
+        if(currenUserRole && currenUserRole._id) {
+            rules = Rules.find({ $or: [{ roleId: currenUserRole._id, budget: { $gte: approval.amount } }, { roleId: currenUserRole._id, budget: -1 }] }).fetch();
+        }
+
+        if(approval.tags && approval.tags.length >= 1 && rules && rules.length >= 1) {
+            approval.tags.forEach(tag => {
+                rules.forEach(rule =>{
+                    if(tag == rule.tagId) {
+                        return userRule = true;
+                    }
+                });
+            });
+        }
+
+        if(currentUser.userRole != 'admin' && !userRule) {
             throw new Meteor.Error('not-allowed', 'You are not allowed!');
         }else {
             if(approval && approval.state && approval.state == 'requested') {
