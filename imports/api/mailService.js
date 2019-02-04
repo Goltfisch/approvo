@@ -5,6 +5,9 @@ import { EmailTemplates } from '/imports/api/emailTemplates/emailTemplates.js';
 
 Meteor.methods({
     'MailService.renderEmail'(data) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
 
         let email = {
             to: '',
@@ -247,6 +250,9 @@ Meteor.methods({
         });
     },
     'MailService.sendEmail'(email) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
 
         const to = email.to;
         const from = email.from;
