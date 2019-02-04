@@ -4,7 +4,7 @@ import { ApprovalStates } from './approvalStates.js'
 
 Meteor.methods({
     'ApprovalStates.insert' (state) {
-        if (!this.userId) {
+        if (!this.userId || Meteor.user().userRole == 'user') {
             throw new Meteor.Error('not-authorized');
         }
 
