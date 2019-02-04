@@ -4,7 +4,7 @@ import { EmailTemplates } from './emailTemplates.js'
 
 Meteor.methods({
     'EmailTemplates.insert' (emailTemplate) {
-        if (!this.userId) {
+        if (!this.userId || Meteor.user().userRole == 'user') {
             throw new Meteor.Error('not-authorized');
         }
 
@@ -17,7 +17,7 @@ Meteor.methods({
         return EmailTemplates.insert(emailTemplate);
     },
     'EmailTemplates.update'(emailTemplate) {
-        if (!this.userId) {
+        if (!this.userId || Meteor.user().userRole == 'user') {
             throw new Meteor.Error('not-authorized');
         }
         
