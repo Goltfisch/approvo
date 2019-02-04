@@ -4,6 +4,9 @@ import { Logs } from './logs.js'
 
 Meteor.methods({
     'Logs.insert' (action, type) {
+        if (!this.userId) {
+            throw new Meteor.Error('not-authorized');
+        }
 
         const log = {
             action: action,
