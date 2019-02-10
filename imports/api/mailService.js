@@ -53,6 +53,7 @@ Meteor.methods({
                         text = text.replace('"User"', user.name);
                         text = text.replace('Approval.Name', approval.name);
                         text = text.replace('##', '\n');
+                        text = text.replace('##', '\n\n');
 
                         email.to = admins[i].emails[0].address;
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" erstellt!'
@@ -70,6 +71,7 @@ Meteor.methods({
                     text = text.replace('"Einkauf"', approval.lastEditByShopping);
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"User"', user.name);
+                    text = text.replace('##', '\n\n');
 
                     email.to = Meteor.users.findOne({ name: approval.lastEditByAdmin }).emails[0].address;
                     email.subject = '[Approvo] Freigabe "' + approval.name + '" bestellt!'
@@ -85,6 +87,7 @@ Meteor.methods({
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"User"', user.name);
                     text = text.replace('"Einkauf"', approval.lastEditByShopping);
+                    text = text.replace('##', '\n\n');
 
                     email.to = Meteor.users.findOne({ name: approval.lastEditByAdmin }).emails[0].address;
                     email.subject = '[Approvo] Freigabe "' + approval.name + '" abgeschlossen!'
@@ -102,6 +105,7 @@ Meteor.methods({
                         text = text.replace('Approval.Name', approval.name);
                         text = text.replace('"User"', user.name);
                         text = text.replace('##', '\n');
+                        text = text.replace('##', '\n\n');
 
                         email.to = shoppings[i].emails[0].address;
                         email.subject = '[Approvo] Anfrage "' + approval.name + '" freigegeben!'
@@ -117,6 +121,7 @@ Meteor.methods({
                     text = text.replace('"User"', user.name);
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
+                    text = text.replace('##', '\n\n');
 
                     if(user.createMsgState) {
                         email.to = user.emails[0].address;
@@ -136,6 +141,7 @@ Meteor.methods({
                     text = text.replace('##', '\n\n');
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('Approval.Name', approval.name);
+                    text = text.replace('##', '\n\n');
 
                     if(user.approveMsgState) {
                         email.to = user.emails[0].address;
@@ -155,6 +161,7 @@ Meteor.methods({
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Shopping"', approval.lastEditByShopping);
+                    text = text.replace('##', '\n\n');
 
                     if(user.orderMsgState) {
                         email.to = user.emails[0].address;
@@ -175,6 +182,7 @@ Meteor.methods({
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('##', '\n');
                     text = text.replace('"Shopping"', approval.lastEditByShopping);
+                    text = text.replace('##', '\n\n');
 
                     if(user.completeMsgState) {
                         email.to = user.emails[0].address;
@@ -194,6 +202,7 @@ Meteor.methods({
                     text = text.replace('##', '\n\n');
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
+                    text = text.replace('##', '\n\n');
 
                     if(user.declineMsgState) {
                         email.to = user.emails[0].address;
@@ -214,6 +223,7 @@ Meteor.methods({
                     text = text.replace('Approval.Name', approval.name);
                     text = text.replace('"Admin"', approval.lastEditByAdmin);
                     text = text.replace('##', '\n');
+                    text = text.replace('##', '\n\n');
 
                     if(user.declineMsgState) {
                         email.to = user.emails[0].address;
@@ -234,6 +244,7 @@ Meteor.methods({
                     text = text.replace('"Role"', data.userRole);
                     text = text.replace('"Admin"', Meteor.user().name);
                     text = text.replace('##', '\n');
+                    text = text.replace('##', '\n\n');
 
                     if(user.roleMsgState) {
                         email.to = user.emails[0].address;
