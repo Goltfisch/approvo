@@ -31,7 +31,7 @@ Meteor.methods({
         return createUser;
     },
     "User.update"(user) {
-        if (!this.userId || Meteor.user().userRole != 'admin' || this.userId != user._id) {
+        if (!this.userId || Meteor.user().userRole != 'admin') {
             throw new Meteor.Error('not-authorized');
         }
 
