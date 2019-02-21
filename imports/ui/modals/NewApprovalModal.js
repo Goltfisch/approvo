@@ -62,6 +62,7 @@ class NewApprovalModal extends Component {
             inputs: [
                 { label: "Name", type: "text", name: "name", placeholder: "Was benötigst du?" },
                 { label: "Betrag", type: "text", name: "amount", defaultValue: "0", placeholder: "Wie hoch ist der Beitrag?" },
+                { label: "Anzahl", type: "text", name: "quantity", defaultValue: "1", placeholder: "Wie oft soll der Artikel bestellt werden?" },
                 { label: "Grund", type: "text", name: "reason", placeholder: "Was ist der Grund für den Kauf?" },
                 { label: "Datum", type: "date", name: "date", placeholder: "Welcher Tag ist heute?", defaultValue: moment().format("YYYY-MM-DD") },
                 { label: "Link", type: "text", name: "link", placeholder: "Wo kann der Artikel eingesehen werden? (Link zum Artikel)" }
