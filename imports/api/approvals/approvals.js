@@ -45,6 +45,9 @@ Approvals.schema = new SimpleSchema( {
         type: String,
         required: false
     },
+    quantity:  {
+        type: Number,
+    },
     createdAt: {
         type: Date,
         required: false
@@ -61,5 +64,6 @@ Approvals.publicFields = {
     lastEditByAdmin: 1,
     lastEditByShopping: 1,
     tags: 1,
+    quantity: 1,
     createdAt: 1
 };
