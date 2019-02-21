@@ -47,6 +47,7 @@ Approvals.schema = new SimpleSchema( {
     },
     quantity:  {
         type: Number,
+        required: true
     },
     createdAt: {
         type: Date,
