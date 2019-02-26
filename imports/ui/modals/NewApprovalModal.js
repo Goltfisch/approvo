@@ -51,6 +51,21 @@ class NewApprovalModal extends Component {
         this.setState(state => ({ tags: [...state.tags, tag] }));
     }
 
+    renderTags() {
+        const tags = this.props.newTags;
+        let text = 'Tags:'
+
+        if(tags && tags.length > 0) {
+            tags.forEach(tag => {
+                let string = ' ' + tag.text + ', ';
+
+                text = text + string;
+            });
+
+            return <p>{text}</p>;
+        }
+    }
+
     getFormConfiguration() {
         const { tags } = this.state;
         const props = this.props;
@@ -76,10 +91,12 @@ class NewApprovalModal extends Component {
                     onClick: formData => {
                         let newApprovalTags = [];
 
-                        if(tags) {
+                        if(tags && tags.length > 0) {
                             tags.forEach(tag => {
                                 newApprovalTags.push(tag._id);
                             });
+                        }else {
+                            return Bert.alert('Es muss midestens ein Tag ausgewählt sein!', 'warning', 'growl-top-right');
                         }
 
                         if(formData.amount.indexOf('.')) {
@@ -125,6 +142,8 @@ class NewApprovalModal extends Component {
                         delimiters={delimiters}
                         placeholder={placeholder}
                     />
+
+                    {this.renderTags()}
                 </div>
             </div>
         );
