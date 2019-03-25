@@ -20,7 +20,7 @@ Meteor.startup(() => {
                 "onApprovedRequest",
                 "onPurchasedApproval",
                 "onDeclinedApproval",
-                "onShelvedApproval",
+                "onShelvedRequest",
                 "onCompletedOrder",
                 "onChangedUserRole"
             ]

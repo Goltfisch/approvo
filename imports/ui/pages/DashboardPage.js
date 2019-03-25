@@ -102,9 +102,7 @@ export class DashboardPage extends Component {
                         case "order":
                             return <Badge type="info">Bestellt</Badge>;
                         case "complete":
-                            return (
-                                <Badge type="alternative">Abgeschlossen</Badge>
-                            );
+                            return (<Badge type="alternative">Abgeschlossen</Badge>);
                         case "decline":
                             return <Badge type="danger">Abgelehnt</Badge>;
                         case "shelved":
@@ -143,11 +141,7 @@ export class DashboardPage extends Component {
             approval.linkedName = (
                 <div className="icon-btn-wrapper">
                     {isAllowedToEdit ?
-                        <Button 
-                            handleClick={this.handleEditButtonClick}
-                            documentId={approval._id}
-                            className="icon-label"
-                        >
+                        <Button handleClick={ this.handleEditButtonClick } documentId={approval._id} className="icon-label">
                             <i className="far fa-edit"></i>
                             {approval.name}
                         </Button> 
@@ -217,6 +211,29 @@ export class DashboardPage extends Component {
                                     handleClick={this.handleStateButtonClick}
                                 >
                                     <i className="far fa-clock" />
+                                </Button>
+                            </div>
+                        )
+                    };
+                case "shelved":
+                    return {
+                        actions: (
+                            <div className="icon-btn-wrapper">
+                                <Button
+                                    className="btn icon-btn success-btn"
+                                    documentId={approvalId}
+                                    action='approve'
+                                    handleClick={this.handleStateButtonClick}
+                                >
+                                    <i className="fas fa-check" />
+                                </Button>
+                                <Button
+                                    className="btn icon-btn danger-btn"
+                                    documentId={approvalId}
+                                    action='decline'
+                                    handleClick={this.handleStateButtonClick}
+                                >
+                                    <i className="fas fa-times" />
                                 </Button>
                             </div>
                         )
@@ -392,20 +409,12 @@ export class DashboardPage extends Component {
                     <div className="content-approvals-actions">
                         <div className="content-approvals-actions-left">
                             <h2>Freigaben</h2>
-                            <Button
-                                className="btn primary-btn"
-                                handleClick={this.handleNewButtonClick}
-                                action="new"
-                            >
+                            <Button className="btn primary-btn" handleClick={this.handleNewButtonClick} action="new">
                                 <i className="fa fa-plus" />
                             </Button>
                         </div>
                         <div className="content-approvals-actions-right">
-                            <Search
-                                handleSearchInputChange={
-                                    this.handleSearchInputChange
-                                }
-                            />
+                            <Search handleSearchInputChange={ this.handleSearchInputChange } />
                         </div>
                     </div>
                     <Table
