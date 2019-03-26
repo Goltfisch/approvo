@@ -86,9 +86,13 @@ class NewApprovalModal extends Component {
                         if(formData.amount.indexOf('.')) {
                             formData.amount = formData.amount.replace('.', ',');
                         }
+                        formData.quantity = parseFloat(formData.quantity);
+
+                        formData.price = parseFloat(formData.amount) * formData.quantity;
 
                         formData.tags = newApprovalTags;
-                        formData.amount = accounting.unformat( formData.amount, "," );
+                        formData.price = accounting.unformat(formData.price, ',');
+                        formData.amount = accounting.unformat(formData.amount, ',');
 
                         props.cancelButtonClick();
                         Bert.alert( "Warte auf Ergebnis...", "info", "growl-top-right" );
