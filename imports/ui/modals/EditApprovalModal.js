@@ -115,6 +115,7 @@ class EditApprovalModal extends Component {
             inputs: [
                 { label: 'Name', type: 'text', name: 'name', defaultValue: approval.name, placeholder: 'Was benötigst du?' },
                 { label: 'Betrag', type: 'text', name: 'amount', defaultValue: formattedAmount, placeholder: 'Wie hoch ist der Beitrag?' },
+                { label: "Anzahl", type: "text", name: "quantity", defaultValue: approval.quantity, placeholder: "Wie oft soll der Artikel bestellt werden?" },
                 { label: 'Grund', type: 'text', name: 'reason', defaultValue: approval.reason, placeholder: 'Was ist der Grund für den Kauf?' },
                 { label: 'Datum', type: 'date', name: 'date', placeholder: 'Welcher Tag ist heute?', defaultValue: moment(approval.date).format('YYYY-MM-DD') },
                 { label: 'Link', type: 'text', name: 'link', defaultValue: approval.link, placeholder: 'Wo kann der Artikel eingesehen werden?' }
@@ -146,10 +147,15 @@ class EditApprovalModal extends Component {
                         if(formData.amount.indexOf('.')) {
                             formData.amount = formData.amount.replace('.', ',');
                         }
+                        formData.quantity = parseFloat(formData.quantity);
+
+                        formData.price = parseFloat(formData.amount) * formData.quantity;
 
                         formData.tags = newApprovalTags;
+                        formData.price = accounting.unformat(formData.price, ',');
                         formData.amount = accounting.unformat(formData.amount, ',');
                         formData.owner = approval.owner;
+
                         Meteor.call('Approvals.update', {
                             _id: approval._id,
                             ...formData
@@ -219,6 +225,8 @@ class EditApprovalModal extends Component {
 
     render() {
         const { tags, suggestions } = this.state;
+
+        console.log($('#amount').val());
 
         let placeholder = "Tags hinzufügen";
 

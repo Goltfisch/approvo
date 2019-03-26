@@ -191,4 +191,22 @@ Meteor.startup(() => {
     //         });
     //     }
     // }
+
+    if(Approvals.find().count() > 0) {
+        let approvals = Approvals.find().fetch();
+
+        approvals.forEach(approval => {
+            if(!approval.quantity) {
+                approval.quantity = 1;
+            }
+            if(!approval.price) {
+                if(approval.quantity && approval.amount) {
+                    approval.price = approval.amount;    
+                }
+                approval.price = parseFloat(approval.amount) * parseFloat(approval.quantity);
+            }
+
+            Meteor.call('Approval.DevUpdate', approval);
+        });
+    }
 });

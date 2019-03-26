@@ -59,6 +59,9 @@ Meteor.methods({
 
         return approvalInsert;
     },
+    'Approval.DevUpdate'(approval) {
+        Approvals.update(approval._id, { $set: approval });
+    },
     'Approvals.update' (approval) {
         const currentUser = Meteor.user();
 

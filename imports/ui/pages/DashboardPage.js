@@ -66,8 +66,13 @@ export class DashboardPage extends Component {
                 col: "2"
             },
             {
-                key: "amount",
-                content: "Betrag",
+                key: "quantity",
+                content: "Anzahl",
+                col: "1"
+            },
+            {
+                key: "price",
+                content: "Ges. Betrag",
                 col: "1",
                 cls: "bold-amount",
                 renderer: item => {

@@ -17,6 +17,10 @@ Approvals.schema = new SimpleSchema( {
         type: Number,
         required: true
     },
+    price: {
+        type: Number,
+        required: false,
+    },
     reason: {
         type: String,
         required: true
@@ -45,6 +49,10 @@ Approvals.schema = new SimpleSchema( {
         type: String,
         required: false
     },
+    quantity:  {
+        type: Number,
+        required: true
+    },
     createdAt: {
         type: Date,
         required: false
@@ -54,6 +62,7 @@ Approvals.schema = new SimpleSchema( {
 Approvals.publicFields = {
     name: 1,
     amount: 1,
+    price: 1,
     reason: 1,
     link: 1,
     state: 1,
@@ -61,5 +70,6 @@ Approvals.publicFields = {
     lastEditByAdmin: 1,
     lastEditByShopping: 1,
     tags: 1,
+    quantity: 1,
     createdAt: 1
 };
