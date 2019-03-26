@@ -130,10 +130,15 @@ class EditApprovalModal extends Component {
                         if(formData.amount.indexOf('.')) {
                             formData.amount = formData.amount.replace('.', ',');
                         }
+                        formData.quantity = parseFloat(formData.quantity);
+
+                        formData.price = parseFloat(formData.amount) * formData.quantity;
 
                         formData.tags = newApprovalTags;
+                        formData.price = accounting.unformat(formData.price, ',');
                         formData.amount = accounting.unformat(formData.amount, ',');
                         formData.owner = approval.owner;
+
                         Meteor.call('Approvals.update', {
                             _id: approval._id,
                             ...formData
@@ -203,6 +208,8 @@ class EditApprovalModal extends Component {
 
     render() {
         const { tags, suggestions } = this.state;
+
+        console.log($('#amount').val());
 
         let placeholder = "Tags hinzufügen";
 
