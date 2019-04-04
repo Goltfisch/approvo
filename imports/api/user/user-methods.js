@@ -100,7 +100,7 @@ Meteor.methods({
         return deleteResult;
     },
     "User.updatePassword"(user) {
-        if (!this.userId || Meteor.user().userRole != 'admin' || this.userId != user._id) {
+        if (!this.userId || Meteor.user().userRole != 'admin') {
             throw new Meteor.Error('not-authorized');
         }
 
@@ -116,7 +116,7 @@ Meteor.methods({
         Meteor.call("Logs.insert", newLog.action, newLog.type);
     },
     "User.updateSettings"(user) {
-        if (!this.userId || Meteor.user().userRole != 'admin' || this.userId != user._id) {
+        if (!this.userId) {
             throw new Meteor.Error('not-authorized');
         }
 
